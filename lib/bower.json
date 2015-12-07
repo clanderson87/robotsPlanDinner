@@ -1,0 +1,26 @@
+{
+  "name": "lib",
+  "version": "0.0.0",
+  "homepage": "https://github.com/clanderson87/moviehistory",
+  "authors": [
+    "Chris <cl.anderson8@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "jquery": "~2.1.4",
+    "firebase": "~2.3.2",
+    "lodash": "~3.10.1",
+    "angular-route": "~1.4.8",
+    "angular-filter": "~0.5.8",
+    "angular-bootstrap": "~0.14.3",
+    "angularfire": "~1.1.3"
+  }
+}
