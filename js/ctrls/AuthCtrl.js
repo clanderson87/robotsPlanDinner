@@ -1,5 +1,5 @@
-app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject", "platform",
-  function($firebaseAuth, $location, $firebaseObject, platform) {
+app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
+  function($firebaseAuth, $location, $firebaseObject) {
 
 //add login factory back?
 
