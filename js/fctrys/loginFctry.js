@@ -1,22 +1,22 @@
-app.factory('LoginFctry', ['$firebaseAuth', '$firebaseObject', '$location',
-  function ($firebaseAuth, $firebaseObject, $location) {
+app.factory('LoginFctry', ['$firebaseAuth', '$firebaseObject', '$location', 'platform',
+  function ($firebaseAuth, $firebaseObject, $location, platform) {
 
   var currentUser = null;
   var client_id = '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com';
   var scopes = 'https://www.googleapis.com/auth/calendar';
 
-}
 
   return {
 
-    onSignIn = function(googleUser) {
+    onSignIn: function(googleUser) {
       var profile = googleUser.getBasicProfile();
       console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
       console.log('Name: ' + profile.getName());
       console.log('Image URL: ' + profile.getImageUrl());
       console.log('Email: ' + profile.getEmail());
+      currentUser = googleUser;
 
-    handleAuthResult = function(authResult) {
+    handleAuthResult: function(authResult) {
         var authorizeDiv = document.getElementById('authorize-div');
         if (authResult && !authResult.error) {
           // Hide auth UI, then load client library.
@@ -29,15 +29,15 @@ app.factory('LoginFctry', ['$firebaseAuth', '$firebaseObject', '$location',
         }
       }
 
-    signOut = function() {
+    signOut: function() {
       var auth2 = gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
       console.log('User signed out.');
     });
 
-    handleAuthClick = function(event) {
+    handleAuthClick: function(event) {
         gapi.auth.authorize(
-          {client_id: '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', scope: SCOPES, immediate: false},
+          {client_id: '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', scope: "https://www.googleapis.com/auth/calendar," immediate: false},
           handleAuthResult);
         return false;
     }
@@ -47,5 +47,6 @@ app.factory('LoginFctry', ['$firebaseAuth', '$firebaseObject', '$location',
 
   }
 
-  };
+  }
+};
 }])
