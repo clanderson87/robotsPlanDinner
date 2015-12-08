@@ -1,4 +1,4 @@
-var app = angular.module('RpdApp', ["firebase", 'angular.filter', 'ngRoute', 'ui.bootstrap']);
+var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap']);
 
 
 //Setting Up routes
