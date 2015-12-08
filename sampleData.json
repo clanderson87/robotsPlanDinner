@@ -1,0 +1,27 @@
+{
+  "users": {
+    "userA": {
+      "uId": 123,
+      "mealTime" : "6:00 PM"
+    },
+
+    "userB": {
+      "uId": 101,
+      "mealTime" : "7:00 PM"
+    }
+  },
+
+  "likes": {
+      "pizza": 123,
+      "burgers": 123,
+      "pizza" : 101
+  },
+
+  "allergies": {
+      "peanuts" : 123,
+      "shellfish" : 123,
+      "peanuts": 101
+  }
+}
+
+//research OrderByChild
