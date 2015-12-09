@@ -10,6 +10,7 @@ app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
   var ref = new Firebase("https://rpd.firebaseio.com");
   var usersRef = ref.child('users');
 
+
 //c&p from firebase, wrapped in function
   this.login = function(){
       ref.authWithOAuthPopup("google", function(error, authData) {
@@ -24,6 +25,8 @@ app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
       }
   )
 };
+
+//need $location.path('pref1') working. Moving on to data collection.
 
 //end Controller Function
 }]);
