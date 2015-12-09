@@ -20,7 +20,6 @@ app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
           userRefObj = authData;
           userRefObj.username = authData.google.displayName;
           ref.child("users").child(authData.uid).set(userRefObj);
-
         };
       }
   )
