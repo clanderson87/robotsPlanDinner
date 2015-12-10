@@ -1,5 +1,7 @@
 <div ng-controller="PrefCtrl as prefCtrl">
   <ul ng-repeat = "possibleLike in prefCtrl.possibleLikes">
-    <input type = "checkbox" ng-click = "addToArray({{prefCtrl.userLikes}},   {{possibleLike}})">{{possibleLike}}<br/>
+    <button ng-click = "prefCtrl.removeLikes($index)">{{possibleLike}}</button>
   </ul>
+  {{prefCtrl.possibleLikes}}
+  <a href="" ng-click = "addToUser()">submit</a>
 </div>

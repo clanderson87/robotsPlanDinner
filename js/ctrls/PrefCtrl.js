@@ -1,20 +1,20 @@
 app.controller('PrefCtrl', ['$location', '$firebaseObject',
   function($location, $firebaseObject) {
 
+    this.ref = new Firebase("https://rpd.firebaseio.com");
+
     this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
 
-    this.userLikes = [];
 
 //try pushing the values of checkboxes within the partial?
 
-    this.addToArray  = function(array, thing){
-      array.push(thing);
-      console.log(array)
+    this.removeLikes = function(index) {
+      this.possibleLikes.splice(index, 1);
     };
 
     this.addToUser = function(){
-      for (var i = userLikes.length - 1; i >= 0; i--) {
-        ref.child("likes").child(userLikes[i]).set(userRefObj.uid);
+      for (var i = possibleLikes.length - 1; i >= 0; i--) {
+        ref.child("likes").child(possibleLikes[i]).set(uid);
       };;
       };
     }])

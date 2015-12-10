@@ -1,12 +1,11 @@
-app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
-  function($firebaseAuth, $location, $firebaseObject) {
+app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject", "LoginFctry",
+  function($firebaseAuth, $location, $firebaseObject, loginFctry) {
 
-//add login factory back?
 
 //Add empty currentUser
-  var currentUser = null;
+  // var currentUser = null;
 
-//init the firebase
+/*init the firebase
   var ref = new Firebase("https://rpd.firebaseio.com");
   var usersRef = ref.child('users');
 
@@ -28,5 +27,5 @@ app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
       $location.path('/pref1');
   };
 
-//end Controller Function
+//end Controller Function*/
 }]);
