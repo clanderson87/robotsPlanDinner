@@ -1,0 +1,23 @@
+{
+  "recipe": {
+    "publisher": "All Recipes",
+    "f2f_url": "http://food2fork.com/view/12345",
+    "ingredients": [
+      "1 head lettuce, torn into small pieces",
+      "1 (10 ounce) package frozen green peas, thawed",
+      "1/2 cup chopped green bell pepper",
+      "12 slices bacon",
+      "1 1/2 cups small cauliflower florets",
+      "1/2 cup chopped celery",
+      "2 cups mayonnaise",
+      "3 tablespoons white sugar",
+      "4 ounces shredded Cheddar cheese"
+    ],
+  "source_url": "http://allrecipes.com/Recipe/Easy-Seven-Layer-Vegetable-Salad/Detail.aspx",
+  "recipe_id": "12345",
+  "image_url": "http://static.food2fork.com/27686796.jpg",
+  "social_rank": 38.98242878080491,
+  "publisher_url": "http://allrecipes.com",
+  "title": "Easy Seven Layer Vegetable Salad"
+  }
+}
