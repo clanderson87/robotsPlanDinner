@@ -1,9 +1,9 @@
-app.controller('PrefCtrl', ['$location', '$firebaseObject'],
-  function($location, $firebaseObject){
+app.controller('PrefCtrl', ['$location', '$firebaseObject',
+  function($location, $firebaseObject) {
 
-    var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
+    this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
 
-    var userLikes = [];
+    this.userLikes = [];
 
 //try pushing the values of checkboxes within the partial?
 
@@ -12,4 +12,4 @@ app.controller('PrefCtrl', ['$location', '$firebaseObject'],
         ref.child("likes").child(userLikes[i]).set(userRefObj.uid);
       };;
       };
-    })
+    }])

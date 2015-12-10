@@ -1,5 +1,5 @@
 <div ng-controller="PrefCtrl as prefCtrl">
   <ul ng-repeat = "possibleLike in prefCtrl.possibleLikes">
-    <input type = "checkbox" ng-checked = "prefCtrl.userLikes.push({{possibleLike}}">{{possibleLike}}<br/>
+    <input type = "checkbox" ng-click = "prefCtrl.userLikes.push({{possibleLike}})">{{possibleLike}}<br/>
   </ul>
 </div>

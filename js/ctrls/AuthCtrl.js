@@ -22,6 +22,8 @@ app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject",
           userRefObj.username = authData.google.displayName;
           ref.child("users").child(authData.uid).set(userRefObj);
         };
+      }, {
+        scope: 'https://www.googleapis.com/auth/calendar'
       }
   )
 };
