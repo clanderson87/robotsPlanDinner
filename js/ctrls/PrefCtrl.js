@@ -1,20 +1,32 @@
-app.controller('PrefCtrl', ['$location', '$firebaseObject',
-  function($location, $firebaseObject) {
+app.controller('PrefCtrl',
+  ['$location',
+  '$firebaseObject',
+  'LoginFctry',
 
-    this.ref = new Firebase("https://rpd.firebaseio.com");
+    function($location,
+      $firebaseObject,
+      loginFctry) {
 
-    this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
+        var ref = new Firebase("https://rpd.firebaseio.com");
+        var auth = ref.getAuth();
+        var user = auth.uid;
 
+        var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
 
+        this.possibleLikes = possibleLikes;
 //try pushing the values of checkboxes within the partial?
 
-    this.removeLikes = function(index) {
-      this.possibleLikes.splice(index, 1);
-    };
+        this.removeLikes = function(index) {
+          this.possibleLikes.splice(index, 1);
 
-    this.addToUser = function(){
-      for (var i = possibleLikes.length - 1; i >= 0; i--) {
-        ref.child("likes").child(possibleLikes[i]).set(uid);
-      };;
-      };
-    }])
+        };
+
+        this.addToUser = function(){
+          console.log(user);
+          for (var i = possibleLikes.length - 1; i >= 0; i--) {
+            ref.child("likes").child(possibleLikes[i]).set(user);
+          };;
+          };
+      }
+  ]
+)
