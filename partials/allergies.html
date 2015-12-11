@@ -1,0 +1,7 @@
+<div ng-controller="PrefCtrl as prefCtrl">
+  <ul ng-repeat = "allergy in prefCtrl.possibleAllergies">
+    <button ng-click = "prefCtrl.pushAllergies($index)">{{allergy}}</button>
+  </ul>
+  {{prefCtrl.userAllergies}}
+  <a href="" ng-click = "prefCtrl.addAllergiesToUser()">submit</a>
+</div>
