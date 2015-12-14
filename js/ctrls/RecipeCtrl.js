@@ -3,11 +3,13 @@ app.controller('RecipeCtrl',
   '$firebaseArray',
   '$firebaseObject',
   'LoginFctry',
+  '$http',
 
     function(
       $firebaseArray,
       $firebaseObject,
-      loginFctry) {
+      loginFctry,
+      $http) {
 
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
@@ -33,12 +35,20 @@ app.controller('RecipeCtrl',
           console.log(x);
           searchTerm = searchLikesArray[x];
           console.log(searchTerm);
-          return searchTerm;
         };
+
 
         this.getRecipes = function(){
-
-        };
+        $http({
+          method: 'GET'
+          url: 'http://food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
+          }).then(function successCallback(response) {
+              console.log(response);
+          }, function errorCallback(response) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+          });
+        }
 
         }
   ]
