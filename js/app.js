@@ -28,7 +28,7 @@ app.config(['$routeProvider', function($routeProvider){
   //route for shopping list
     .when('/shoppingList', {
       templateUrl: 'partials/list.html',
-      controller: 'ListCtrl as listCtrl'
+      controller: 'RecipeCtrl as recipeCtrl'
     })
     .otherwise({ redirectTo: '/shoppingList' });
 

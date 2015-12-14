@@ -18,7 +18,6 @@ app.controller('PrefCtrl',
         this.possibleLikes = possibleLikes;
         this.possibleAllergies = possibleAllergies;
         this.userAllergies = userAllergies;
-//try pushing the values of checkboxes within the partial?
 
         this.removeLikes = function(index) {
           this.possibleLikes.splice(index, 1);
@@ -34,14 +33,17 @@ app.controller('PrefCtrl',
             ref.child("likes").child(possibleLikes[i]).set(user);
           };
           $location.path('/pref2');
-          };
+        };
 
         this.addAllergiesToUser = function(){
           for (var i = userAllergies.length - 1; i >= 0; i--) {
             ref.child("allergies").child(userAllergies[i]).set(user);
           };
           $location.path('/pref3');
+        }
 
+        this.addMealTimeToUser = function(){
+          ref.child("users").child(user).set(selectedTime);
         }
       }
   ]
