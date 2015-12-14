@@ -16,18 +16,29 @@ app.controller('RecipeCtrl',
         var allergyArray = $firebaseArray(allergyRef);
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
         var likesArray = $firebaseArray(likesRef);
+        var searchLikesArray = [];
+        var ridArray = [];
+        var searchTerm = "";
 
-        console.log(likesArray);
-        console.log(allergyArray);
+        // console.log(likesArray);
+        // console.log(allergyArray);
 
-        // this.getRecipes = function()
+        this.getTerm = function(){
+          likesArray.forEach(function (like)
+            {
+              searchLikesArray.push(String(like.$id));
+            });
+          console.log(searchLikesArray)
+          x = Math.floor((Math.random() * searchLikesArray.length) +.5);
+          console.log(x);
+          searchTerm = searchLikesArray[x];
+          console.log(searchTerm);
+          return searchTerm;
+        };
 
+        this.getRecipes = function(){
 
-
-        // this.commencePrimaryIgnition = function(Allergies, Likes){
-        // $http.get('http://food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q='+ , function(data) {
-        //   /*optional stuff to do after success */
-        // });
+        };
 
         }
   ]
