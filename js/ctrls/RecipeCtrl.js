@@ -39,17 +39,17 @@ app.controller('RecipeCtrl',
 
 
         this.getRecipes = function(){
-        $http({
-          method: 'GET'
-          url: 'http://food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
-          }).then(function successCallback(response) {
-              console.log(response);
-          }, function errorCallback(response) {
-              // called asynchronously if an error occurs
-              // or server returns response with an error status.
-          });
-        }
 
+            $http(
+            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
+            ).success( function(recipes) {
+             recipes.forEach(function(recipe){
+              ridArray.push(recipe.recipe_id)
+             })
+             console.log(ridArray);
+          });
+
+        }
         }
   ]
 )
