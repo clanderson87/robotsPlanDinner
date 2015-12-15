@@ -60,6 +60,15 @@ app.controller('RecipeCtrl',
              })
           };
 
+        this.slapToGoogle = function(){
+          $http.post('https://www.googleapis.com/calendar/v3/calendars')
+
+          //research Javascript events insert
+
+
+          });
+        }
+
         }
   ]
 )
