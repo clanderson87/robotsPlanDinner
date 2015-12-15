@@ -2,14 +2,14 @@ app.controller('RecipeCtrl',
   [
   '$firebaseArray',
   '$firebaseObject',
-  'LoginFctry',
   '$http',
+  'LoginFctry',
 
     function(
       $firebaseArray,
       $firebaseObject,
-      loginFctry,
-      $http) {
+      $http,
+      loginFctry) {
 
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
@@ -19,8 +19,10 @@ app.controller('RecipeCtrl',
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
         var likesArray = $firebaseArray(likesRef);
         var searchLikesArray = [];
-        var ridArray = [];
         var searchTerm = "";
+        var ridArray = [];
+        var ridSearch = null;
+
 
         // console.log(likesArray);
         // console.log(allergyArray);
@@ -38,18 +40,26 @@ app.controller('RecipeCtrl',
         };
 
 
-        this.getRecipes = function(){
-
-            $http(
+        this.getRecipe = function(){
+            $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
-            ).success( function(recipes) {
-             recipes.forEach(function(recipe){
-              ridArray.push(recipe.recipe_id)
+            ).success( function(object) {
+              object.recipes.forEach(function(recipe){
+                ridArray.push(recipe.recipe_id);
+              })
+              console.log(ridArray);
+              y = Math.floor((Math.random() * ridArray.length) +.5)
+              ridSearch = ridArray[y];
+              console.log(ridSearch);
+              $http.get(
+              'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
+              ).success(function(object) {
+              console.log(object.recipe);
+              return object.recipe;
              })
-             console.log(ridArray);
-          });
+             })
+          };
 
-        }
         }
   ]
 )
