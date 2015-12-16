@@ -11,6 +11,7 @@ app.controller('RecipeCtrl',
       $http,
       loginFctry) {
 
+        //Firebase code
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
         var user = auth.uid;
@@ -18,10 +19,13 @@ app.controller('RecipeCtrl',
         var allergyArray = $firebaseArray(allergyRef);
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
         var likesArray = $firebaseArray(likesRef);
+
+        //Opening Empty Variables
         var searchLikesArray = [];
         var searchTerm = "";
         var ridArray = [];
         var ridSearch = null;
+        var finalRecipe = {};
 
 
         // console.log(likesArray);
@@ -55,20 +59,15 @@ app.controller('RecipeCtrl',
               'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
               ).success(function(object) {
               console.log(object.recipe);
-              return object.recipe;
+              finalRecipe = object.recipe;
+
              })
              })
           };
 
         this.slapToGoogle = function(){
-          $http.post('https://www.googleapis.com/calendar/v3/calendars')
 
-          //research Javascript events insert
-
-
-          });
-        }
-
+          };
         }
   ]
 )

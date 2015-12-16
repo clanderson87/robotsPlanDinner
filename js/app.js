@@ -21,7 +21,7 @@ app.config(['$routeProvider', function($routeProvider){
       controller: 'PrefCtrl as prefCtrl'
     })
   //route for 'advanced Options' array page
-    .when('pref3', {
+    .when('/pref3', {
       templateUrl: 'partials/options.html',
       controller: 'PrefCtrl as prefCtrl'
   })

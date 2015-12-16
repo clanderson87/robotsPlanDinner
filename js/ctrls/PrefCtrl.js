@@ -13,11 +13,19 @@ app.controller('PrefCtrl',
 
         var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
         var possibleAllergies = ["Peanut", "Shellfish", "Gluten"]
-        var userAllergies =[];
+        var daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        var userAllergies = [];
+        var mealTime;
+        var daysToSkip = [];
+        var daysToPlan;
 
         this.possibleLikes = possibleLikes;
         this.possibleAllergies = possibleAllergies;
         this.userAllergies = userAllergies;
+        this.mealTime = mealTime;
+        this.daysArray = daysArray;
+        this.daysToSkip = daysToSkip;
+        this.daysToPlan =  daysToPlan;
 
         this.removeLikes = function(index) {
           this.possibleLikes.splice(index, 1);
@@ -42,9 +50,23 @@ app.controller('PrefCtrl',
           $location.path('/pref3');
         }
 
-        this.addMealTimeToUser = function(){
-          ref.child("users").child(user).set(selectedTime);
+        this.pushDays = function(index){
+          this.daysToSkip.push(daysArray.slice(index, (index+1)).toString())
         }
+
+
+        this.setToUser = function(){
+          this.mealTime = this.mealTime.toLocaleTimeString();
+          this.daysToPlan -= (this.daysToSkip.length);
+          this.daysToSkip = this.daysToSkip.toString();
+          console.log(this.mealTime, this.daysToSkip, this.daysToPlan);
+          console.log(this.daysToPlan);
+          console.log(this.mealTime);
+          ref.child("users").child(user).child("mealTime").set(this.mealTime);
+          ref.child("users").child(user).child("daysToSkip").set(this.daysToSkip);
+          ref.child("users").child(user).child("daysToPlan").set(this.daysToPlan);
+          $location.path('/shoppingList');
       }
+    }
   ]
 )

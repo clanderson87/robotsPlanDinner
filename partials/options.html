@@ -1,0 +1,11 @@
+<div ng-controller = "PrefCtrl as prefCtrl">
+  <div>Select a favorite mealtime: <input type = "time" ng-model="prefCtrl.mealTime" required autofocus/></div>
+  <div>How many days in advance would you like the robots to plan? <input type = "number" ng-model="prefCtrl.daysToPlan" max = "7"/></div>
+  <div>What days do you usually eat out? <i>(when should we skip?)</i><br/>
+    <ul>
+      <button ng-repeat="day in prefCtrl.daysArray" ng-click = "prefCtrl.pushDays($index)">{{day}}</button>
+    </ul>
+      {{prefCtrl.daysToSkip}}
+      {{prefCtrl.daysToPlan}}
+  <button ng-click="prefCtrl.setToUser()">Submit</button>
+</div>
