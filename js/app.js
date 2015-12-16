@@ -21,14 +21,14 @@ app.config(['$routeProvider', function($routeProvider){
       controller: 'PrefCtrl as prefCtrl'
     })
   //route for 'advanced Options' array page
-    .when('pref3', {
+    .when('/pref3', {
       templateUrl: 'partials/options.html',
       controller: 'PrefCtrl as prefCtrl'
   })
   //route for shopping list
     .when('/shoppingList', {
       templateUrl: 'partials/list.html',
-      controller: 'ListCtrl as listCtrl'
+      controller: 'RecipeCtrl as recipeCtrl'
     })
     .otherwise({ redirectTo: '/shoppingList' });
 
