@@ -54,14 +54,10 @@ app.controller('PrefCtrl',
           this.daysToSkip.push(daysArray.slice(index, (index+1)).toString())
         }
 
-
         this.setToUser = function(){
-          this.mealTime = this.mealTime.toLocaleTimeString();
+          this.mealTime = this.mealTime.toISOString();
           this.daysToPlan -= (this.daysToSkip.length);
           this.daysToSkip = this.daysToSkip.toString();
-          console.log(this.mealTime, this.daysToSkip, this.daysToPlan);
-          console.log(this.daysToPlan);
-          console.log(this.mealTime);
           ref.child("users").child(user).child("mealTime").set(this.mealTime);
           ref.child("users").child(user).child("daysToSkip").set(this.daysToSkip);
           ref.child("users").child(user).child("daysToPlan").set(this.daysToPlan);

@@ -1,4 +1,12 @@
-var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap']);
+var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap', 'gapi']).value('GoogleApp', {
+    apiKey: 'AIzaSyB3X-I9Eha9q4Ddry7dqRMX7b9WI13XyWc ',
+    clientId: '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com ',
+    scopes: [
+      // whatever scopes you need for your app, for example:
+      'https://www.googleapis.com/auth/calendar'
+      // ...
+    ]
+  })
 
 
 //Setting Up routes

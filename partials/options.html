@@ -6,6 +6,8 @@
       <button ng-repeat="day in prefCtrl.daysArray" ng-click = "prefCtrl.pushDays($index)">{{day}}</button>
     </ul>
       {{prefCtrl.daysToSkip}}
+      {{prefCtrl.mealTime}}
       {{prefCtrl.daysToPlan}}
+
   <button ng-click="prefCtrl.setToUser()">Submit</button>
 </div>
