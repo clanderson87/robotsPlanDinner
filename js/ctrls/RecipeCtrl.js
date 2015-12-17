@@ -5,9 +5,7 @@ app.controller('RecipeCtrl',
   '$firebaseObject',
   '$http',
   'LoginFctry',
-  'Calendar',
-  'cmApiService',
-  'googleClient',
+  'gapiService',
 
     function(
       $firebaseArray,
@@ -15,9 +13,7 @@ app.controller('RecipeCtrl',
       $firebaseObject,
       $http,
       loginFctry,
-      Calendar,
-      cmApiService,
-      googleClient) {
+      gapi) {
 
 
         //Google Shit. Maybe.
@@ -95,12 +91,9 @@ app.controller('RecipeCtrl',
 
         this.slapToGoogle = function(obj){
           obj = rpdCalendar;
-          googleClient.afterApiLoaded().then(function(){
-            gapi.client.calendar.calendars.insert(obj).execute(function(resp){
+          gapi.client.calendar.calendars.insert(obj).execute(function(resp){
               console.log(resp);
-              $scope.$apply();
             });
-          });
 
           console.log(rpdCalendar)
           // Calendar.insertCalendars(rpdCalendar);
