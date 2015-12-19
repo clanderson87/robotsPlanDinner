@@ -40,6 +40,42 @@ app.controller('RecipeCtrl',
         var ridSearch = null;
         var finalRecipe = {};
         var finalRecipeArray = [];
+        var calId = ""
+        var event = {
+            "kind": "calendar#event",,
+            "id": calId
+            "htmlLink": finalRecipe.source_url,
+            "summary": finalRecipe.title,
+            "start": {
+              "date": user.mealTime,
+              "dateTime": user.mealTime,
+              "timeZone": string
+            },
+            "end": {
+              "date": date,
+              "dateTime": datetime,
+              "timeZone": string
+            },
+
+            "reminders": {
+              "useDefault": boolean,
+              "overrides": [
+                {
+                  "method": string,
+                  "minutes": integer
+                }
+              ]
+            },
+            "attachments": [
+              {
+                "fileUrl": ,
+                "title": string,
+                "mimeType": string,
+                "iconLink": string,
+                "fileId": string
+              }
+            ]
+          }
         var rpdCalendar = {
             summary: "Robot Planned Dinners"
           }
@@ -91,61 +127,29 @@ app.controller('RecipeCtrl',
              })
           };
 
-        this.abcd = function(){
-          console.log(gapi.client.calendar)
-          var request = gapi.client.calendar.calendars.insert(rpdCalendar)
-          request.execute(function(resp){
-            console.log(resp)
-          });;
-          console.log("YEAH BITCHES!");
-          }
-
         this.thisOrThat = function(){
-          gapi.client.setApiKey();
-          console.log(gapi.client.calendar);
-          var request = gapi.client.calendar.calendars.insert({'summary':'Robots Planned Dinners'}).execute(function(resp){
-            console.log(resp);
+          var summaryArray = [];
+            gapi.client.calendar.calendarList.list().execute(function(resp){
+              console.log(resp);
+              resp.items.forEach(function(object){
+                summaryArray.push(object.id, object.summary);
+            });
+            console.log(summaryArray);
+            if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
+              var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
+              var calId = summaryArray[v];
+              console.log(calId);
+              var request = gapi.client.calendar.events.insert
+            } else {
+              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
+                  console.log(resp);
+                });
+            }
           });
-          // gapi.client.request(
-          //   {'path': 'https://www.googleapis.com/calendar/v3/calendars?key=924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com'},
-          //   {'method': 'POST'},
-          //   {'body': {rpdCalendar}}
-          //   ).then(function(resp){
-          //     console.log(resp);
-          //   });
           };
 
-        this.slapToGoogle = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.thisOrThat);
-          (function(resp){
-              console.log("This happened");
-              console.log(gapiService);
-              console.log(gapi.client);
-            });
-
-          console.log(rpdCalendar)
-          // Calendar.insertCalendars(rpdCalendar);
-          // var event = {
-          //   'summary': finalRecipe,
-          //   'description': finalRecipe.ingredients.toString(),
-          //   'start': {
-          //     'dateTime': user.mealTime,
-          //     'timeZone': 'America/Chicago'
-          //   },
-          //   'end': {
-          //     'dateTime': '2015-05-28T17:00:00-07:00',
-          //     'timeZone': 'America/Chicago'
-          //   },
-          // };
-
-          // var request = gapi.client.calendar.events.insert({
-          //   'calendarId': 'primary',
-          //   'resource': event
-          // });
-
-          // request.execute(function(event) {
-          //   appendPre('Event created: ' + event.htmlLink);
-          // });
+        this.authorizeGcal = function(){
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.thisOrThat);;
           }
         }
   ]
