@@ -4,18 +4,19 @@ var init = function() {
   window.initGapi();
 }
 
-app.controller('MainController', function($scope, $window, gapiService) {
+app.controller('MainController', function($scope, $window, gapiService, $location) {
   var postInitiation = function() {
+    gapi.client.load('calendar', 'v3');
     // load all your assets
   }
   $window.initGapi = function() {
     gapiService.initGapi(postInitiation);
+    $location.path('/login');
   }
 });
 
 app.service('gapiService', function() {
   this.initGapi = function(postInitiation) {
-    gapi.client.load('calendar', 'v3');
   }
 });
 
@@ -25,6 +26,10 @@ app.config(['$routeProvider', function($routeProvider){
   //route to prompt sign into firebase with google
   $routeProvider
     .when('/', {
+      templateUrl: 'partials/main.html',
+      controller: 'MainController as mainCtrl'
+    })
+    .when('/login', {
       templateUrl: 'partials/main.html',
       controller: 'AuthCtrl as authCtrl'
     })

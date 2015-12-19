@@ -4,6 +4,7 @@ app.controller('RecipeCtrl',
   '$scope',
   '$firebaseObject',
   '$http',
+  '$window',
   'LoginFctry',
   'gapiService',
 
@@ -12,14 +13,15 @@ app.controller('RecipeCtrl',
       $scope,
       $firebaseObject,
       $http,
+      $window,
       loginFctry,
-      gapi) {
+      gapiService) {
 
 
         //Google Shit. Maybe.
         // var CLIENT_ID = '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com';
 
-        // var apiKey = 'AIzaSyB3X-I9Eha9q4Ddry7dqRMX7b9WI13XyWc';
+        var apiKey = 'AIzaSyB3X-I9Eha9q4Ddry7dqRMX7b9WI13XyWc';
         // gapi.client.setApiKey(apiKey)
 
         //Firebase code
@@ -89,10 +91,22 @@ app.controller('RecipeCtrl',
              })
           };
 
-        this.slapToGoogle = function(obj){
-          obj = rpdCalendar;
-          gapi.client.calendar.calendars.insert(obj).execute(function(resp){
-              console.log(resp);
+          this.thisOrThat = function(){
+            gapi.client.setApiKey();
+            console.log("api key set!")
+            gapi.client.load('calendar', 'v3')
+            console.log("api loaded!");
+            console.log(gapi.client)
+            console.log(gapi.client.Calendar);
+            console.log("Fuck this shit")
+          }
+
+        this.slapToGoogle = function(){
+          console.log(gapiService)
+          console.log(gapi.client)
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar'}, this.thisOrThat);
+          (function(resp){
+              console.log("This happened");
             });
 
           console.log(rpdCalendar)
