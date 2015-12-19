@@ -5,8 +5,13 @@ var init = function() {
 }
 
 app.controller('MainController', function($scope, $window, gapiService, $location) {
+
+  this.callback = function(){
+    console.log("This happened in the controller");
+  }
+
   var postInitiation = function() {
-    gapi.client.load('calendar', 'v3');
+    gapi.client.load('calendar', 'v3', callback);
     // load all your assets
   }
   $window.initGapi = function() {
@@ -16,7 +21,12 @@ app.controller('MainController', function($scope, $window, gapiService, $locatio
 });
 
 app.service('gapiService', function() {
+  this.callback = function(){
+    console.log("this happened in the service")
+  }
+
   this.initGapi = function(postInitiation) {
+  gapi.client.load('calendar', 'v3', this.callback)
   }
 });
 

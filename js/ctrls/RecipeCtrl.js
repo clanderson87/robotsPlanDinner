@@ -91,22 +91,36 @@ app.controller('RecipeCtrl',
              })
           };
 
-          this.thisOrThat = function(){
-            gapi.client.setApiKey();
-            console.log("api key set!")
-            gapi.client.load('calendar', 'v3')
-            console.log("api loaded!");
-            console.log(gapi.client)
-            console.log(gapi.client.Calendar);
-            console.log("Fuck this shit")
+        this.abcd = function(){
+          console.log(gapi.client.calendar)
+          var request = gapi.client.calendar.calendars.insert(rpdCalendar)
+          request.execute(function(resp){
+            console.log(resp)
+          });;
+          console.log("YEAH BITCHES!");
           }
 
+        this.thisOrThat = function(){
+          gapi.client.setApiKey();
+          console.log(gapi.client.calendar);
+          var request = gapi.client.calendar.calendars.insert({'summary':'Robots Planned Dinners'}).execute(function(resp){
+            console.log(resp);
+          });
+          // gapi.client.request(
+          //   {'path': 'https://www.googleapis.com/calendar/v3/calendars?key=924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com'},
+          //   {'method': 'POST'},
+          //   {'body': {rpdCalendar}}
+          //   ).then(function(resp){
+          //     console.log(resp);
+          //   });
+          };
+
         this.slapToGoogle = function(){
-          console.log(gapiService)
-          console.log(gapi.client)
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar'}, this.thisOrThat);
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.thisOrThat);
           (function(resp){
               console.log("This happened");
+              console.log(gapiService);
+              console.log(gapi.client);
             });
 
           console.log(rpdCalendar)
