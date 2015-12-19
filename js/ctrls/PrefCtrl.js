@@ -50,8 +50,12 @@ app.controller('PrefCtrl',
 
         // empty variables:
         var userAllergies = [];
-        var mealTime;
-        var mealTimeEnd;
+        var mealTime = new Date();
+          mealTime.setMinutes(30);
+          mealTime.setSeconds(00);
+          mealTime.setMilliseconds(00);
+
+        var mealTimeEnd = mealTime;
         var daysToSkip = [];
         var daysToPlan;
 
@@ -92,17 +96,16 @@ app.controller('PrefCtrl',
         }
 
         this.setToUser = function(){
-          this.mealTime = this.mealTime.valueOf()
-          this.mealTimeEnd = this.mealTime + 3600000;
-          console.log(mealTimeEnd);
+          mealTimeEnd.setHours((mealTime.getHours()+1));
+          mealTimeEnd.setMinutes((mealTime.getMinutes()));
+          // console.log(this.mealTimeEnd)
+          console.log(this.mealTimeEnd);
+          this.mealTimeEnd = this.mealTimeEnd.toISOString();
           this.mealTime = this.mealTime.toISOString();
-          this.mealTime = this.mealTime.setDate(d);
-          this.mealTime = this.mealTime.setMonth(m);
-          this.mealTime = this.mealTime.setFullYear(y);
-          // this.mealTime = this.mealTime.toISOString();
           this.daysToPlan -= (this.daysToSkip.length);
           this.daysToSkip = this.daysToSkip.toString();
           ref.child("users").child(user).child("mealTime").set(this.mealTime);
+          ref.child("users").child(user).child("mealTimeEnd").set(this.mealTimeEnd);
           ref.child("users").child(user).child("daysToSkip").set(this.daysToSkip);
           ref.child("users").child(user).child("daysToPlan").set(this.daysToPlan);
 
