@@ -41,43 +41,33 @@ app.controller('RecipeCtrl',
         var finalRecipe = {};
         var finalRecipeArray = [];
         var calId = ""
-        var event = {
-            "kind": "calendar#event",,
-            "id": calId
+        var dinner = {
+            "kind": "calendar#event",
+            "id": calId,
             "htmlLink": finalRecipe.source_url,
             "summary": finalRecipe.title,
             "start": {
-              "date": user.mealTime,
               "dateTime": user.mealTime,
-              "timeZone": string
+              "timeZone": user.timeZone
             },
             "end": {
-              "date": date,
-              "dateTime": datetime,
-              "timeZone": string
+              "dateTime": user.mealTimeEnd,
+              "timeZone": user.timeZone
             },
 
             "reminders": {
-              "useDefault": boolean,
               "overrides": [
                 {
-                  "method": string,
-                  "minutes": integer
+                  "method": 'popup',
+                  "minutes": 90
                 }
               ]
             },
             "attachments": [
               {
-                "fileUrl": ,
-                "title": string,
-                "mimeType": string,
-                "iconLink": string,
-                "fileId": string
+                "fileUrl": finalRecipe.source_url
               }
             ]
-          }
-        var rpdCalendar = {
-            summary: "Robot Planned Dinners"
           }
 
 
@@ -127,7 +117,7 @@ app.controller('RecipeCtrl',
              })
           };
 
-        this.thisOrThat = function(){
+        this.createCalOrEvent = function(){
           var summaryArray = [];
             gapi.client.calendar.calendarList.list().execute(function(resp){
               console.log(resp);
@@ -139,7 +129,15 @@ app.controller('RecipeCtrl',
               var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
               var calId = summaryArray[v];
               console.log(calId);
-              var request = gapi.client.calendar.events.insert
+              console.log(gapi.client.calendar.events.insert);
+              var request = gapi.client.calendar.events.insert({
+                  'calendarId': calId,
+                  'resource': dinner
+                })
+              request.execute(function(resp){
+                console.log(resp)
+              })
+              console.log("Got here");
             } else {
               var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
                   console.log(resp);
@@ -149,7 +147,7 @@ app.controller('RecipeCtrl',
           };
 
         this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.thisOrThat);;
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);;
           }
         }
   ]
