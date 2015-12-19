@@ -25,11 +25,11 @@ app.controller('PrefCtrl',
           var rndm = (d + (Math.floor(Math.random()* 7) + 1))
           var rndmDate = function(){
             if(d > 28) {
-
               //deals with february
               if(m === 2){
-                if(y % 4 === 0) {
-                  d -= 29;
+                //deals with leapyears
+                if(y % 4 === 0 && y % 100 !== 0) {
+                  d -= 28;
                   m += 1;
                 } else{
                   d -= 28;
@@ -37,13 +37,21 @@ app.controller('PrefCtrl',
                 }
               } else if(m === 4 || m === 6 || m === 9 || m === 11) {
                 //deals with April, June, September and November
-                d -= 30;
-                m+= 1;
+                if(d > 30){
+                  d -= 30;
+                  m += 1;
               }
-            }
+              }
+              return d, m;
+            } else {
+              return d, m;
+            };
+          }
+
         // empty variables:
         var userAllergies = [];
         var mealTime;
+        var mealTimeEnd;
         var daysToSkip = [];
         var daysToPlan;
 
@@ -51,6 +59,7 @@ app.controller('PrefCtrl',
         this.possibleAllergies = possibleAllergies;
         this.userAllergies = userAllergies;
         this.mealTime = mealTime;
+        this.mealTimeEnd = mealTimeEnd;
         this.daysArray = daysArray;
         this.daysToSkip = daysToSkip;
         this.daysToPlan =  daysToPlan;
@@ -83,8 +92,14 @@ app.controller('PrefCtrl',
         }
 
         this.setToUser = function(){
+          this.mealTime = this.mealTime.valueOf()
+          this.mealTimeEnd = this.mealTime + 3600000;
+          console.log(mealTimeEnd);
+          this.mealTime = this.mealTime.toISOString();
           this.mealTime = this.mealTime.setDate(d);
-          this.mealTime = this.mealTime.
+          this.mealTime = this.mealTime.setMonth(m);
+          this.mealTime = this.mealTime.setFullYear(y);
+          // this.mealTime = this.mealTime.toISOString();
           this.daysToPlan -= (this.daysToSkip.length);
           this.daysToSkip = this.daysToSkip.toString();
           ref.child("users").child(user).child("mealTime").set(this.mealTime);
