@@ -17,37 +17,6 @@ app.controller('PrefCtrl',
         var possibleAllergies = ["Peanut", "Shellfish", "Gluten"]
         var daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-        //date bullshit
-        var date = new Date();
-          var d = date.getDate();
-          var m = date.getMonth() + 1;
-          var y = date.getFullYear();
-          var rndm = (d + (Math.floor(Math.random()* 7) + 1))
-          var rndmDate = function(){
-            if(d > 28) {
-              //deals with february
-              if(m === 2){
-                //deals with leapyears
-                if(y % 4 === 0 && y % 100 !== 0) {
-                  d -= 28;
-                  m += 1;
-                } else{
-                  d -= 28;
-                  m += 1;
-                }
-              } else if(m === 4 || m === 6 || m === 9 || m === 11) {
-                //deals with April, June, September and November
-                if(d > 30){
-                  d -= 30;
-                  m += 1;
-              }
-              }
-              return d, m;
-            } else {
-              return d, m;
-            };
-          }
-
         // empty variables:
         var userAllergies = [];
         var mealTime = new Date();

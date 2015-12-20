@@ -88,17 +88,29 @@ app.controller('RecipeCtrl',
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
+          var rndmDate = function(){
+            var d = new Date();
+            var x = (Math.floor(Math.random() * 7) + 1);
+            var rDate = ((d.getDate()) + x)
+            d.setDate(rDate);
+            console.log
+
+            //need to work on assigning gCal-able dates within a range. THINK ABOUT OVERLAP.
+
+          }
+
+
           var dinner = {
                     "kind": "calendar#event",
                     "htmlLink": this.finalRecipe.source_url,
                     "summary": this.finalRecipe.title,
-                    "description": this.finalRecipe.ingredients.join(', ').toString(),
+                    "description": this.finalRecipe.ingredients.join(', '),
                     "start": {
-                      "dateTime": '2015-12-20T00:30:00.000Z',
+                      "date": rndmDate(),
                       "timeZone": 'America/Chicago'
                     },
                     "end": {
-                      "dateTime": '2015-12-20T01:30:00.000Z',
+                      "date": rndmDate(),
                       "timeZone": 'America/Chicago'
                     },
 
