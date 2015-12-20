@@ -28,8 +28,7 @@ app.controller('RecipeCtrl',
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
         var user = auth.uid;
-        var userProp = ref.child("users").child(user);
-        console.log(userProp)
+        var daysToPlan = ref.child("daysToPlan").orderByValue().equalTo(user);
         var allergyRef = ref.child("allergies").orderByValue().equalTo(user);
         var allergyArray = $firebaseArray(allergyRef);
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
@@ -43,36 +42,8 @@ app.controller('RecipeCtrl',
         var finalRecipe = {};
         var finalRecipeArray = [];
         var calId = ""
-        var dinner = {
-            "kind": "calendar#event",
-            "id": calId,
-            "htmlLink": finalRecipe.source_url,
-            "summary": finalRecipe.title,
-            "start": {
-              "dateTime": user.mealTime,
-              "timeZone": user.timeZone
-            },
-            "end": {
-              "dateTime": user.mealTimeEnd,
-              "timeZone": user.timeZone
-            },
 
-            "reminders": {
-              "overrides": [
-                {
-                  "method": 'popup',
-                  "minutes": 90
-                }
-              ]
-            },
-            "attachments": [
-              {
-                "fileUrl": finalRecipe.source_url
-              }
-            ]
-          }
 
-          console.log(userProp.mealTime)
 
         //testing code for getting the searchTerm, modify to get dishes for v2.
 
@@ -107,21 +78,45 @@ app.controller('RecipeCtrl',
               $http.get(
               'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
               ).success(function(object) {
-              finalRecipe = object.recipe;
+              this.finalRecipe = object.recipe;
               finalRecipeArray.push(finalRecipe);
-              console.log(finalRecipe);
-              console.log(finalRecipeArray);
-              return {
-                finalRecipe,
-                finalRecipeArray
-              }
+             })
+          }
+        );
+      }
 
-             })
-             })
-          };
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
+          var dinner = {
+                    "kind": "calendar#event",
+                    "htmlLink": this.finalRecipe.source_url,
+                    "summary": this.finalRecipe.title,
+                    "description": this.finalRecipe.ingredients.join(', ').toString(),
+                    "start": {
+                      "dateTime": '2015-12-20T00:30:00.000Z',
+                      "timeZone": 'America/Chicago'
+                    },
+                    "end": {
+                      "dateTime": '2015-12-20T01:30:00.000Z',
+                      "timeZone": 'America/Chicago'
+                    },
+
+                    "reminders": {
+                      "useDefault": false,
+                      "overrides": [
+                        {
+                          "method": 'popup',
+                          "minutes": 90
+                        }
+                      ]
+                    },
+                    "attachments": [
+                      {
+                        "fileUrl": this.finalRecipe.source_url
+                      }
+                    ]
+                  }
             gapi.client.calendar.calendarList.list().execute(function(resp){
               console.log(resp);
               resp.items.forEach(function(object){
