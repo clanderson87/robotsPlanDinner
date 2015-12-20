@@ -55,7 +55,7 @@ app.controller('PrefCtrl',
           mealTime.setSeconds(00);
           mealTime.setMilliseconds(00);
 
-        var mealTimeEnd = mealTime;
+        var mealTimeEnd = new Date();
         var daysToSkip = [];
         var daysToPlan;
 
@@ -96,19 +96,20 @@ app.controller('PrefCtrl',
         }
 
         this.setToUser = function(){
-          mealTimeEnd.setHours((mealTime.getHours()+1));
-          mealTimeEnd.setMinutes((mealTime.getMinutes()));
+          this.mealTimeEnd.setHours((mealTime.getHours() + 1));
+          this.mealTimeEnd.setMinutes((mealTime.getMinutes()));
+          this.mealTimeEnd.setSeconds(00);
           // console.log(this.mealTimeEnd)
+          console.log(this.mealTime)
           console.log(this.mealTimeEnd);
-          this.mealTimeEnd = this.mealTimeEnd.toISOString();
-          this.mealTime = this.mealTime.toISOString();
+          this.mealTimeEnd = this.mealTimeEnd.valueOf();
+          this.mealTime = this.mealTimeEnd.valueOf();
           this.daysToPlan -= (this.daysToSkip.length);
           this.daysToSkip = this.daysToSkip.toString();
-          ref.child("users").child(user).child("mealTime").set(this.mealTime);
-          ref.child("users").child(user).child("mealTimeEnd").set(this.mealTimeEnd);
-          ref.child("users").child(user).child("daysToSkip").set(this.daysToSkip);
-          ref.child("users").child(user).child("daysToPlan").set(this.daysToPlan);
-
+          ref.child("mealTime").child(this.mealTime).set(user);
+          ref.child("mealTimeEnd").child(this.mealTimeEnd).set(user);
+          ref.child("daysToSkip").child(this.daysToSkip).set(user);
+          ref.child("daysToPlan").child(this.daysToPlan).set(user);
           $location.path('/shoppingList');
       }
     }

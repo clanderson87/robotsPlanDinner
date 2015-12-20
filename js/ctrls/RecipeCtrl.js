@@ -28,6 +28,8 @@ app.controller('RecipeCtrl',
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
         var user = auth.uid;
+        var userProp = ref.child("users").child(user);
+        console.log(userProp)
         var allergyRef = ref.child("allergies").orderByValue().equalTo(user);
         var allergyArray = $firebaseArray(allergyRef);
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
@@ -70,6 +72,7 @@ app.controller('RecipeCtrl',
             ]
           }
 
+          console.log(userProp.mealTime)
 
         //testing code for getting the searchTerm, modify to get dishes for v2.
 
