@@ -57,6 +57,7 @@ app.controller('RecipeCtrl',
           console.log(x);
           searchTerm = searchLikesArray[x];
           console.log(searchTerm);
+          this.getRecipe();
         };
 
 
@@ -80,6 +81,7 @@ app.controller('RecipeCtrl',
               ).success(function(object) {
               this.finalRecipe = object.recipe;
               finalRecipeArray.push(finalRecipe);
+              this.authorizeGcal();
              })
           }
         );
@@ -88,29 +90,38 @@ app.controller('RecipeCtrl',
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
+          var startTime = [];
+          var endTime = [];
           var rndmDate = function(){
             var d = new Date();
             var x = (Math.floor(Math.random() * 7) + 1);
+            console.log(x);
             var rDate = ((d.getDate()) + x)
+            d.setHours(18);
+            d.setMinutes(00);
+            d.setSeconds(00);
             d.setDate(rDate);
-            console.log
-
+            // d = d.toISOString();
+            console.log(d)
+            startTime.push(d.toISOString());
+            d.setHours(19);
+            console.log(d)
+            endTime.push(d.toISOString());
             //need to work on assigning gCal-able dates within a range. THINK ABOUT OVERLAP.
-
           }
-
-
+          rndmDate();
+          var startToString = startTime.toString();
+          var endToString = endTime.toString();
           var dinner = {
                     "kind": "calendar#event",
-                    "htmlLink": this.finalRecipe.source_url,
                     "summary": this.finalRecipe.title,
-                    "description": this.finalRecipe.ingredients.join(', '),
+                    "description": this.finalRecipe.ingredients.join(', ') + " " + this.finalRecipe.source_url,
                     "start": {
-                      "date": rndmDate(),
+                      "dateTime": startToString,
                       "timeZone": 'America/Chicago'
                     },
                     "end": {
-                      "date": rndmDate(),
+                      "dateTime": endToString,
                       "timeZone": 'America/Chicago'
                     },
 
@@ -123,11 +134,10 @@ app.controller('RecipeCtrl',
                         }
                       ]
                     },
-                    "attachments": [
-                      {
-                        "fileUrl": this.finalRecipe.source_url
-                      }
-                    ]
+                    "source": {
+                      "title": this.finalRecipe.title,
+                      "url": this.finalRecipe.source_url
+                    },
                   }
             gapi.client.calendar.calendarList.list().execute(function(resp){
               console.log(resp);
@@ -157,7 +167,7 @@ app.controller('RecipeCtrl',
           };
 
         this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);;
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
           }
         }
   ]
