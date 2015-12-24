@@ -21,7 +21,7 @@ var currentUser = null;
           ref.child("users").child(authData.uid).set(userRefObj);
         };
       }, {
-        scope: 'https://www.googleapis.com/auth/calendar'
+        scope: 'https://www.googleapis.com/auth/calendar',
         }
       )
       $location.path('/pref1');

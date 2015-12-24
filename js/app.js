@@ -1,5 +1,33 @@
-var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap']);
+var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap'])
 
+var init = function() {
+  window.initGapi();
+}
+
+app.controller('MainController', function($scope, $window, gapiService, $location) {
+
+  this.callback = function(){
+    console.log("This happened in the controller");
+  }
+
+  var postInitiation = function() {
+    gapi.client.load('calendar', 'v3', callback);
+    // load all your assets
+  }
+  $window.initGapi = function() {
+    gapiService.initGapi(postInitiation);
+  }
+});
+
+app.service('gapiService', function($location) {
+  this.callback = function(){
+    console.log("this happened in the service");
+  }
+
+  this.initGapi = function(postInitiation) {
+  gapi.client.load('calendar', 'v3', this.callback)
+  }
+});
 
 //Setting Up routes
 app.config(['$routeProvider', function($routeProvider){
@@ -7,6 +35,10 @@ app.config(['$routeProvider', function($routeProvider){
   //route to prompt sign into firebase with google
   $routeProvider
     .when('/', {
+      templateUrl: 'partials/splash.html',
+      controller: 'MainController as mainCtrl'
+    })
+    .when('/login', {
       templateUrl: 'partials/main.html',
       controller: 'AuthCtrl as authCtrl'
     })
@@ -33,4 +65,3 @@ app.config(['$routeProvider', function($routeProvider){
     .otherwise({ redirectTo: '/shoppingList' });
 
 }]);
-
