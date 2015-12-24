@@ -43,26 +43,21 @@ app.controller('RecipeCtrl',
         this.getTerm = function(){
           likesArray.forEach(function (like)
             {
-              searchLikesArray.push(String(like.$id));
-            });
-          console.log(searchLikesArray)
-          x = Math.floor((Math.random() * searchLikesArray.length));
-          console.log(x);
-          searchTerm = searchLikesArray[x];
-          console.log(searchTerm);
-        };
-
-
-        this.getRecipe = function(){
-            y = Math.floor((Math.random() * ridArray.length));
             $http.get(
-            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
-            ).success( function(object) {
-              object.recipes.forEach(function(recipe){
-                if(ridArray.length < 11){
-                ridArray.push(recipe.recipe_id);
+            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + like
+            ).success( function(recipeList) {
+              console.log(recipeList)
+              recipeList.recipes.forEach(function(recipe){
+                if(recipe.social_rank > 95){
+                ridArray.push(recipe.recipe_id)
+                console.log(recipe);
               }
               })
+            })
+          }).done(function(){
+          for (var i = 0; i < 8; i++) {
+            if(ridArray.length > 7) {
+              y = Math.floor((Math.random() * ridArray.length));
               console.log(ridArray);
               ridSearch = ridArray[y];
               console.log(ridSearch);
@@ -73,10 +68,38 @@ app.controller('RecipeCtrl',
                 this.finalRecipe = objectA.recipe;
                 console.log(this.finalRecipe)
                 finalRecipeArray.push(this.finalRecipe);
-            }
-          );
-       })
+                console.log(this.finalRecipeArray)
+            })
+          }
+        }
+      })
+      }
+
+        this.getRecipe = function(){
+            // y = Math.floor((Math.random() * ridArray.length));
+            // $http.get(
+            // 'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
+            // ).success( function(object) {
+            //   object.recipes.forEach(function(recipe){
+            //     if(ridArray.length < 11){
+            //     ridArray.push(recipe.recipe_id);
+            //   }
+            //   })
+            //   console.log(ridArray);
+            //   ridSearch = ridArray[y];
+            //   console.log(ridSearch);
+            //   $http.get(
+            //   'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
+            //     ).success(function(objectA) {
+            //     console.log(objectA);
+            //     this.finalRecipe = objectA.recipe;
+            //     console.log(this.finalRecipe)
+            //     finalRecipeArray.push(this.finalRecipe);
+          //   }
+          // );
        }
+       // )
+       // }
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
