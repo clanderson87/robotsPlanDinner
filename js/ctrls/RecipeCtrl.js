@@ -43,9 +43,9 @@ app.controller('RecipeCtrl',
         var finalRecipeArray = [];
         var calId = ""
 
-
-
-        //testing code for getting the searchTerm, modify to get dishes for v2.
+        this.authorizeGcal = function(){
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
+          };
 
         this.getTerm = function(){
           likesArray.forEach(function (like)
@@ -53,17 +53,15 @@ app.controller('RecipeCtrl',
               searchLikesArray.push(String(like.$id));
             });
           console.log(searchLikesArray)
-          x = Math.floor((Math.random() * searchLikesArray.length) +.5);
+          x = Math.floor((Math.random() * searchLikesArray.length) + .25);
           console.log(x);
           searchTerm = searchLikesArray[x];
           console.log(searchTerm);
-          this.getRecipe();
         };
 
 
         this.getRecipe = function(){
-            console.log(finalRecipe);
-            console.log(finalRecipeArray);
+            y = Math.floor((Math.random() * ridArray.length) +.5);
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
             ).success( function(object) {
@@ -73,20 +71,19 @@ app.controller('RecipeCtrl',
               }
               })
               console.log(ridArray);
-              y = Math.floor((Math.random() * ridArray.length) +.5)
               ridSearch = ridArray[y];
               console.log(ridSearch);
               $http.get(
               'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
-              ).success(function(object) {
+              ).then(function(object) {
               this.finalRecipe = object.recipe;
+              console.log(finalRecipe)
               finalRecipeArray.push(finalRecipe);
-              this.authorizeGcal();
-             })
+              console.log(finalRecipeArray);
+             });
           }
         );
       }
-
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
@@ -101,13 +98,11 @@ app.controller('RecipeCtrl',
             d.setMinutes(00);
             d.setSeconds(00);
             d.setDate(rDate);
-            // d = d.toISOString();
             console.log(d)
             startTime.push(d.toISOString());
             d.setHours(19);
             console.log(d)
             endTime.push(d.toISOString());
-            //need to work on assigning gCal-able dates within a range. THINK ABOUT OVERLAP.
           }
           rndmDate();
           var startToString = startTime.toString();
@@ -166,9 +161,6 @@ app.controller('RecipeCtrl',
           });
           };
 
-        this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
-          }
         }
   ]
 )

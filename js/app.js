@@ -16,13 +16,12 @@ app.controller('MainController', function($scope, $window, gapiService, $locatio
   }
   $window.initGapi = function() {
     gapiService.initGapi(postInitiation);
-    $location.path('/login');
   }
 });
 
-app.service('gapiService', function() {
+app.service('gapiService', function($location) {
   this.callback = function(){
-    console.log("this happened in the service")
+    console.log("this happened in the service");
   }
 
   this.initGapi = function(postInitiation) {
@@ -36,7 +35,7 @@ app.config(['$routeProvider', function($routeProvider){
   //route to prompt sign into firebase with google
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/main.html',
+      templateUrl: 'partials/splash.html',
       controller: 'MainController as mainCtrl'
     })
     .when('/login', {
