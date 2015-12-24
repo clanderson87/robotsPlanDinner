@@ -46,7 +46,7 @@ app.controller('RecipeCtrl',
               searchLikesArray.push(String(like.$id));
             });
           console.log(searchLikesArray)
-          x = Math.floor((Math.random() * searchLikesArray.length) + .25);
+          x = Math.floor((Math.random() * searchLikesArray.length));
           console.log(x);
           searchTerm = searchLikesArray[x];
           console.log(searchTerm);
@@ -54,7 +54,7 @@ app.controller('RecipeCtrl',
 
 
         this.getRecipe = function(){
-            y = Math.floor((Math.random() * ridArray.length) +.5);
+            y = Math.floor((Math.random() * ridArray.length));
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + searchTerm
             ).success( function(object) {
