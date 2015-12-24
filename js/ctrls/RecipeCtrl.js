@@ -17,13 +17,6 @@ app.controller('RecipeCtrl',
       loginFctry,
       gapiService) {
 
-
-        //Google Shit. Maybe.
-        // var CLIENT_ID = '924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com';
-
-        var apiKey = 'AIzaSyB3X-I9Eha9q4Ddry7dqRMX7b9WI13XyWc';
-        // gapi.client.setApiKey(apiKey)
-
         //Firebase code
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
@@ -75,15 +68,15 @@ app.controller('RecipeCtrl',
               console.log(ridSearch);
               $http.get(
               'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
-              ).then(function(object) {
-              this.finalRecipe = object.recipe;
-              console.log(finalRecipe)
-              finalRecipeArray.push(finalRecipe);
-              console.log(finalRecipeArray);
-             });
-          }
-        );
-      }
+                ).success(function(objectA) {
+                console.log(objectA);
+                this.finalRecipe = objectA.recipe;
+                console.log(this.finalRecipe)
+                finalRecipeArray.push(this.finalRecipe);
+            }
+          );
+       })
+       }
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
@@ -92,12 +85,11 @@ app.controller('RecipeCtrl',
           var rndmDate = function(){
             var d = new Date();
             var x = (Math.floor(Math.random() * 7) + 1);
-            console.log(x);
             var rDate = ((d.getDate()) + x)
+            d.setDate(rDate);
             d.setHours(18);
             d.setMinutes(00);
             d.setSeconds(00);
-            d.setDate(rDate);
             console.log(d)
             startTime.push(d.toISOString());
             d.setHours(19);
@@ -105,18 +97,18 @@ app.controller('RecipeCtrl',
             endTime.push(d.toISOString());
           }
           rndmDate();
-          var startToString = startTime.toString();
-          var endToString = endTime.toString();
+
           var dinner = {
                     "kind": "calendar#event",
+                    "htmlLink": this.finalRecipe.source_url,
                     "summary": this.finalRecipe.title,
-                    "description": this.finalRecipe.ingredients.join(', ') + " " + this.finalRecipe.source_url,
+                    "description": this.finalRecipe.ingredients.join(', '),
                     "start": {
-                      "dateTime": startToString,
+                      "dateTime": startTime.toString(),
                       "timeZone": 'America/Chicago'
                     },
                     "end": {
-                      "dateTime": endToString,
+                      "dateTime": endTime.toString(),
                       "timeZone": 'America/Chicago'
                     },
 
@@ -132,7 +124,7 @@ app.controller('RecipeCtrl',
                     "source": {
                       "title": this.finalRecipe.title,
                       "url": this.finalRecipe.source_url
-                    },
+                    }
                   }
             gapi.client.calendar.calendarList.list().execute(function(resp){
               console.log(resp);
