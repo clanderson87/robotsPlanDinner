@@ -136,17 +136,24 @@ app.controller('RecipeCtrl',
             console.log(summaryArray);
             if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
               var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
-              var calId = summaryArray[v];
-              console.log(calId);
-              console.log(gapi.client.calendar.events.insert);
-              var request = gapi.client.calendar.events.insert({
+              var calId = summaryArray[v].toString();
+              var requestEvents = gapi.client.calendar.events.list({
+                'calendarId': calId,
+                'timeMax': startTime.toString(),
+                'timeMin': endTime.toString()
+              })
+              requestEvents.execute(function(resp){
+                console.log(resp);
+              })
+
+              var requestCreation = gapi.client.calendar.events.insert({
                   'calendarId': calId,
                   'resource': dinner
                 })
-              request.execute(function(resp){
+              requestCreation.execute(function(resp){
                 console.log(resp)
               })
-              console.log("Got here");
+              console.log("Event created successfully");
             } else {
               var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
                   console.log(resp);
