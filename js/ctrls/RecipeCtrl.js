@@ -35,32 +35,14 @@ app.controller('RecipeCtrl',
         var finalRecipe = {};
         var finalRecipeArray = [];
         var calId = "";
+        var iterator = 0;
 
         this.authorizeGcal = function(){
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
           };
 
-        this.getTerm = function(){
-
-          for (var i = likesArray.length - 1; i >= 0; i--) {
-            console.log(likesArray[i])
-            $http.get(
-            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
-            ).success(function(recipeList) {
-              console.log(recipeList)
-              recipeList.recipes.forEach(function(recipe){
-                if(recipe.social_rank > 98){
-                ridArray.push(recipe.recipe_id)
-                console.log(recipe);
-              }
-              }
-              )
-            })
-          }
-          this.create()
-        }
-
         this.createFinalRecipeArray = function(){
+          console.log("this happened?")
           for (var i = 0; i < 8; i++) {
             if(ridArray.length > 7) {
               y = Math.floor((Math.random() * ridArray.length));
@@ -81,6 +63,49 @@ app.controller('RecipeCtrl',
         }
         }
       };
+
+        this.getTerm = function(){
+          for (var i = likesArray.length - 1; i >= 0; i--) {
+            $http.get(
+            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
+            ).success(function(recipeList) {
+              console.log(recipeList)
+              recipeList.recipes.forEach(function(recipe){
+                if(recipe.social_rank > 98.5){
+                ridArray.push(recipe.recipe_id);
+                iterator++;
+                console.log(iterator)
+
+              }
+              }
+              )
+            }).then(function() {
+              if (iterator > 29) {
+                    console.log("this happened?")
+                    for (var i = 0; i < 8; i++) {
+                      if(ridArray.length > 7) {
+                        y = Math.floor((Math.random() * ridArray.length));
+                        console.log(ridArray);
+                        ridSearch = ridArray[y];
+                        console.log(ridSearch);
+                        //too many api calls. While loop?
+                        $http.get(
+                        'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
+                          ).success(function(objectA) {
+                          console.log(objectA);
+                          this.finalRecipe = objectA.recipe;
+                          console.log(this.finalRecipe)
+                          finalRecipeArray.push(this.finalRecipe);
+                          console.log(finalRecipeArray)
+                          ridArray = [];
+                    }
+                    )
+                  }
+                  }
+                  }
+            })
+          }
+        }
 
         this.getRecipe = function(){
             // y = Math.floor((Math.random() * ridArray.length));
