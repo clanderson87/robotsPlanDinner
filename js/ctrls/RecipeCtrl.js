@@ -34,27 +34,33 @@ app.controller('RecipeCtrl',
         var ridSearch = null;
         var finalRecipe = {};
         var finalRecipeArray = [];
-        var calId = ""
+        var calId = "";
 
         this.authorizeGcal = function(){
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
           };
 
         this.getTerm = function(){
-          likesArray.forEach(function (like)
-            {
+
+          for (var i = likesArray.length - 1; i >= 0; i--) {
+            console.log(likesArray[i])
             $http.get(
-            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + like
-            ).success( function(recipeList) {
+            'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
+            ).success(function(recipeList) {
               console.log(recipeList)
               recipeList.recipes.forEach(function(recipe){
-                if(recipe.social_rank > 95){
+                if(recipe.social_rank > 98){
                 ridArray.push(recipe.recipe_id)
                 console.log(recipe);
               }
-              })
+              }
+              )
             })
-          }).done(function(){
+          }
+          this.create()
+        }
+
+        this.createFinalRecipeArray = function(){
           for (var i = 0; i < 8; i++) {
             if(ridArray.length > 7) {
               y = Math.floor((Math.random() * ridArray.length));
@@ -69,11 +75,12 @@ app.controller('RecipeCtrl',
                 console.log(this.finalRecipe)
                 finalRecipeArray.push(this.finalRecipe);
                 console.log(this.finalRecipeArray)
-            })
+                ridArray = [];
           }
+          )
         }
-      })
-      }
+        }
+      };
 
         this.getRecipe = function(){
             // y = Math.floor((Math.random() * ridArray.length));
@@ -174,8 +181,7 @@ app.controller('RecipeCtrl',
                 });
             }
           });
-          };
-
+          }
         }
   ]
 )
