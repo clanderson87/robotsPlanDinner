@@ -48,32 +48,23 @@ app.controller('RecipeCtrl',
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
             ).success(function(recipeList) {
-              console.log(recipeList)
               recipeList.recipes.forEach(function(recipe){
                 if(recipe.social_rank > 98.5){
                 ridArray.push(recipe.recipe_id);
                 iterator++;
-                console.log(iterator)
 
               }
               }
               )
             }).then(function() {
               if (iterator > 29) {
-                    console.log("this happened?")
                     while (b <= 6) {
                         y = Math.floor((Math.random() * ridArray.length));
-                        console.log(ridArray);
                         ridSearch = ridArray[y];
-                        console.log(ridSearch);
-                        console.log(b)
-                        //too many api calls. While loop?
                         $http.get(
                         'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                           ).success(function(objectA) {
-                          console.log(objectA);
                           this.finalRecipe = objectA.recipe;
-                          console.log(this.finalRecipe)
                           finalRecipeArray.push(this.finalRecipe);
                           console.log(finalRecipeArray);
 
@@ -86,6 +77,8 @@ app.controller('RecipeCtrl',
             }
           }
 
+
+// EVERYTHING ABOVE WORKS FOR THE LOVE OF GOD DON'T FUCK IT UP.
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
