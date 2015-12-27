@@ -49,7 +49,7 @@ app.controller('RecipeCtrl',
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
             ).success(function(recipeList) {
               recipeList.recipes.forEach(function(recipe){
-                if(recipe.social_rank > 98.5){
+                if(recipe.social_rank > 99){
                 ridArray.push(recipe.recipe_id);
                 iterator++;
 
@@ -78,7 +78,7 @@ app.controller('RecipeCtrl',
           }
 
 
-// EVERYTHING ABOVE WORKS FOR THE LOVE OF GOD DON'T FUCK IT UP.
+// EVERYTHING ABOVE WORKS KIND OF. FOR THE LOVE OF GOD DON'T FUCK IT UP.
 
         this.createCalOrEvent = function(){
           var summaryArray = [];
@@ -137,6 +137,12 @@ app.controller('RecipeCtrl',
             if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
               var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
               var calId = summaryArray[v].toString();
+            } else {
+              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
+                  console.log(resp);
+                  var calId = resp.calendarID
+                });
+            }
               var requestEvents = gapi.client.calendar.events.list({
                 'calendarId': calId,
                 'timeMax': startTime.toString(),
@@ -144,21 +150,17 @@ app.controller('RecipeCtrl',
               })
               requestEvents.execute(function(resp){
                 console.log(resp);
+                if (resp.etag = '""0""' ){
+                  var requestCreation = gapi.client.calendar.events.insert({
+                      'calendarId': calId,
+                      'resource': dinner
+                    })
+                  requestCreation.execute(function(resp){
+                    console.log(resp)
+                  })
+                  console.log("Event created successfully");
+                }
               })
-
-              var requestCreation = gapi.client.calendar.events.insert({
-                  'calendarId': calId,
-                  'resource': dinner
-                })
-              requestCreation.execute(function(resp){
-                console.log(resp)
-              })
-              console.log("Event created successfully");
-            } else {
-              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
-                  console.log(resp);
-                });
-            }
           });
           }
         }
