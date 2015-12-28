@@ -34,7 +34,6 @@ app.controller('RecipeCtrl',
         var ridSearch = null;
         var finalRecipe = {};
         var finalRecipeArray = [];
-        var calId = "";
 
 
         this.authorizeGcal = function(){
@@ -84,90 +83,104 @@ app.controller('RecipeCtrl',
 // EVERYTHING ABOVE WORKS KIND OF. FOR THE LOVE OF GOD DON'T FUCK IT UP.
 
         this.createCalOrEvent = function(){
-          var summaryArray = [];
-          var startTime = [];
-          var endTime = [];
-          var rndmDate = function(){
-            var d = new Date();
-            var x = (Math.floor(Math.random() * 7) + 1);
-            var rDate = ((d.getDate()) + x)
-            d.setDate(rDate);
-            d.setHours(18);
-            d.setMinutes(00);
-            d.setSeconds(00);
-            console.log(d)
-            startTime.push(d.toISOString());
-            d.setHours(19);
-            console.log(d)
-            endTime.push(d.toISOString());
-          }
-          rndmDate();
-          var p = (Math.floor(Math.random() * finalRecipeArray.length) - 1)
-          var rndmRecipe = finalRecipeArray[p]
-          var dinner = {
-                    "kind": "calendar#event",
-                    "htmlLink": rndmRecipe.source_url,
-                    "summary": rndmRecipe.title,
-                    "description": rndmRecipe.ingredients.join(', '),
-                    "start": {
-                      "dateTime": startTime.toString(),
-                      "timeZone": 'America/Chicago'
-                    },
-                    "end": {
-                      "dateTime": endTime.toString(),
-                      "timeZone": 'America/Chicago'
-                    },
+        //setting empty variables for calendar ops
+        var summaryArray = [];
+        var calId = ""
 
-                    "reminders": {
-                      "useDefault": false,
-                      "overrides": [
-                        {
-                          "method": 'popup',
-                          "minutes": 90
-                        }
-                      ]
-                    },
-                    "source": {
-                      "title": rndmRecipe.title,
-                      "url": rndmRecipe.source_url
-                    }
-                  }
-            gapi.client.calendar.calendarList.list().execute(function(respLC){
-              console.log(respLC);
-              respLC.items.forEach(function(object){
-                summaryArray.push(object.id, object.summary);
+        //getting calendars
+        gapi.client.calendar.calendarList.list().execute(function(respLC){
+          console.log(respLC);
+          respLC.items.forEach(function(object){
+            summaryArray.push(object.id, object.summary);
             });
-            console.log(summaryArray);
-            if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
-              var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
-              var calId = summaryArray[v].toString();
-            } else {
-              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
-                  console.log(respC);
-                  var calId = respC.id;
-                });
+          console.log(summaryArray);
+        }
+        )
+        if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
+          var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
+          var calId = summaryArray[v].toString();
+        } else {
+          var requestCals = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
+            console.log(respC);
+          var calId = respC.id;
+          });
+        }
+
+        //more empty variables for setDates function
+        var megaFire = function(){
+          for (var z = 0; z < finalRecipeArray.length; z++){
+            var d = new Date();
+            var startTime = [];
+            var endTime = [];
+            var setDates = function(){
+              var rDate = ((d.getDate()) + z)
+              d.setDate(rDate);
+              d.setHours(18);
+              d.setMinutes(00);
+              d.setSeconds(00);
+              console.log(d)
+              startTime.push(d.toISOString());
+              d.setHours(19);
+              console.log(d)
+              endTime.push(d.toISOString());
             }
+            setDates();
+
+            var dinner = {
+              "kind": "calendar#event",
+              "htmlLink": finalRecipeArray[z].source_url,
+              "summary": finalRecipeArray[z].title,
+              "description": finalRecipeArray[z].ingredients.join(', '),
+              "start": {
+                "dateTime": startTime.toString(),
+                "timeZone": 'America/Chicago'
+              },
+              "end": {
+                "dateTime": endTime.toString(),
+                "timeZone": 'America/Chicago'
+              },
+
+              "reminders": {
+                "useDefault": false,
+                "overrides": [
+                  {
+                    "method": 'popup',
+                    "minutes": 90
+                  }
+                ]
+              },
+              "source": {
+                "title": finalRecipeArray[z].title,
+                "url": finalRecipeArray[z].source_url
+              }
+            };
+
             var requestEvents = gapi.client.calendar.events.list({
               'calendarId': calId,
               'timeMax': startTime.toString(),
               'timeMin': endTime.toString()
-            })
+            });
+
             requestEvents.execute(function(respE){
               console.log(respE);
-              if (respE.etag = '""0""' ){
+              if (respE.etag = '""0""' || respE === 'false'){
                 var requestCreation = gapi.client.calendar.events.insert({
                     'calendarId': calId,
                     'resource': dinner
                   })
                 requestCreation.execute(function(respEC){
+                  console.log(respEC)
                   console.log("Event created successfully");
                 })
               } else {
-
+                console.log("Robots have already planned!")
               }
-              })
-          });
+            })
           }
-        }
+        } //end of megaFire
+        megaFire();
+      };//end of createCalOrEvent
+
+    }
   ]
 )
