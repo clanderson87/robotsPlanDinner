@@ -44,33 +44,36 @@ app.controller('RecipeCtrl',
         this.getRecipes = function(){
           var b = 0;
           var iterator = 0;
+          var bestRids = [];
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
             ).success(function(recipeList) {
               recipeList.recipes.forEach(function(recipe){
-                if(recipe.social_rank > 99){
-                ridArray.push(recipe.recipe_id);
+                ridArray.push(recipe);
                 iterator++;
-
-              }
               }
               )
             }).then(function() {
-              if (iterator > 29) {
-                    while (b <= 6) {
-                        y = Math.floor((Math.random() * ridArray.length));
-                        ridSearch = ridArray[y];
-                        $http.get(
-                        'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
-                          ).success(function(objectA) {
+              if (iterator >= (likesArray.length * 30)) {
+                ridArray.forEach(function(recipe) {
+                  if(recipe.social_rank >= 99){
+                    bestRids.push(recipe.recipe_id)
+                  }
+                });
+                while (b <= 6) {
+                  y = Math.floor((Math.random() * bestRids.length));
+                    ridSearch = bestRids[y];
+                    $http.get(
+                      'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
+                        ).success(function(objectA) {
                           this.finalRecipe = objectA.recipe;
                           finalRecipeArray.push(this.finalRecipe);
                           console.log(finalRecipeArray);
 
-                    }
-                    )
-                          b++
+                        }
+                        )
+                  b++
                   }
                   }
                   })
@@ -99,12 +102,13 @@ app.controller('RecipeCtrl',
             endTime.push(d.toISOString());
           }
           rndmDate();
-
+          var p = (Math.floor(Math.random() * finalRecipeArray.length) - 1)
+          var rndmRecipe = finalRecipeArray[p]
           var dinner = {
                     "kind": "calendar#event",
-                    "htmlLink": this.finalRecipe.source_url,
-                    "summary": this.finalRecipe.title,
-                    "description": this.finalRecipe.ingredients.join(', '),
+                    "htmlLink": rndmRecipe.source_url,
+                    "summary": rndmRecipe.title,
+                    "description": rndmRecipe.ingredients.join(', '),
                     "start": {
                       "dateTime": startTime.toString(),
                       "timeZone": 'America/Chicago'
@@ -124,13 +128,13 @@ app.controller('RecipeCtrl',
                       ]
                     },
                     "source": {
-                      "title": this.finalRecipe.title,
-                      "url": this.finalRecipe.source_url
+                      "title": rndmRecipe.title,
+                      "url": rndmRecipe.source_url
                     }
                   }
-            gapi.client.calendar.calendarList.list().execute(function(resp){
-              console.log(resp);
-              resp.items.forEach(function(object){
+            gapi.client.calendar.calendarList.list().execute(function(respLC){
+              console.log(respLC);
+              respLC.items.forEach(function(object){
                 summaryArray.push(object.id, object.summary);
             });
             console.log(summaryArray);
@@ -138,28 +142,29 @@ app.controller('RecipeCtrl',
               var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
               var calId = summaryArray[v].toString();
             } else {
-              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(resp){
-                  console.log(resp);
-                  var calId = resp.calendarID
+              var request = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
+                  console.log(respC);
+                  var calId = respC.id;
                 });
             }
-              var requestEvents = gapi.client.calendar.events.list({
-                'calendarId': calId,
-                'timeMax': startTime.toString(),
-                'timeMin': endTime.toString()
-              })
-              requestEvents.execute(function(resp){
-                console.log(resp);
-                if (resp.etag = '""0""' ){
-                  var requestCreation = gapi.client.calendar.events.insert({
-                      'calendarId': calId,
-                      'resource': dinner
-                    })
-                  requestCreation.execute(function(resp){
-                    console.log(resp)
+            var requestEvents = gapi.client.calendar.events.list({
+              'calendarId': calId,
+              'timeMax': startTime.toString(),
+              'timeMin': endTime.toString()
+            })
+            requestEvents.execute(function(respE){
+              console.log(respE);
+              if (respE.etag = '""0""' ){
+                var requestCreation = gapi.client.calendar.events.insert({
+                    'calendarId': calId,
+                    'resource': dinner
                   })
+                requestCreation.execute(function(respEC){
                   console.log("Event created successfully");
-                }
+                })
+              } else {
+
+              }
               })
           });
           }
