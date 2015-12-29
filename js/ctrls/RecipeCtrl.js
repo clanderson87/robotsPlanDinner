@@ -34,11 +34,42 @@ app.controller('RecipeCtrl',
         var ridSearch = null;
         var finalRecipe = {};
         var finalRecipeArray = [];
+        var calId = "";
+
+
+        this.getCalList = function(){
+        //setting empty variables for calendar ops
+          var summaryArray = [];
+          var getCalId = function(){
+            if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
+                var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
+                calId = summaryArray[v].toString();
+                console.log(calId);
+            } else {
+              var requestCals = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
+                  console.log(respC);
+                  calId = respC.id;
+                  console.log(calId)
+              });
+            }
+          };
+          //getting calendars
+          gapi.client.calendar.calendarList.list().execute(function(respLC){
+            console.log(respLC);
+            respLC.items.forEach(function(object){
+              summaryArray.push(object.id, object.summary)
+              });
+            console.log(summaryArray);
+            getCalId();
+          });
+        }
 
 
         this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.createCalOrEvent);
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.getCalList);
           };
+
+        this.authorizeGcal();
 
         this.getRecipes = function(){
           var b = 0;
@@ -82,33 +113,10 @@ app.controller('RecipeCtrl',
 
 // EVERYTHING ABOVE WORKS KIND OF. FOR THE LOVE OF GOD DON'T FUCK IT UP.
 
-        this.createCalOrEvent = function(){
-        //setting empty variables for calendar ops
-        var summaryArray = [];
-        var calId = ""
-
-        //getting calendars
-        gapi.client.calendar.calendarList.list().execute(function(respLC){
-          console.log(respLC);
-          respLC.items.forEach(function(object){
-            summaryArray.push(object.id, object.summary);
-            });
-          console.log(summaryArray);
-        }
-        )
-        if (summaryArray.indexOf('RobotPlannedDinners') >= 0) {
-          var v = (summaryArray.indexOf('RobotPlannedDinners') - 1);
-          var calId = summaryArray[v].toString();
-        } else {
-          var requestCals = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
-            console.log(respC);
-          var calId = respC.id;
-          });
-        }
-
         //more empty variables for setDates function
-        var megaFire = function(){
-          for (var z = 0; z < finalRecipeArray.length; z++){
+        this.megaFire = function(){
+          var z = 0;
+          do {
             var d = new Date();
             var startTime = [];
             var endTime = [];
@@ -123,7 +131,7 @@ app.controller('RecipeCtrl',
               d.setHours(19);
               console.log(d)
               endTime.push(d.toISOString());
-            }
+            };
             setDates();
 
             var dinner = {
@@ -163,7 +171,7 @@ app.controller('RecipeCtrl',
 
             requestEvents.execute(function(respE){
               console.log(respE);
-              if (respE.etag = '""0""' || respE === 'false'){
+              if (respE.etag = '""0""'){
                 var requestCreation = gapi.client.calendar.events.insert({
                     'calendarId': calId,
                     'resource': dinner
@@ -173,13 +181,12 @@ app.controller('RecipeCtrl',
                   console.log("Event created successfully");
                 })
               } else {
-                console.log("Robots have already planned!")
+                  console.log("Robots have already planned!");
               }
             })
-          }
+            z++
+          } while (z < finalRecipeArray.length); //end of doWhile statement;
         } //end of megaFire
-        megaFire();
-      };//end of createCalOrEvent
 
     }
   ]
