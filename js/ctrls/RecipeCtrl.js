@@ -28,14 +28,24 @@ app.controller('RecipeCtrl',
         var likesArray = $firebaseArray(likesRef);
 
         //Opening Empty Variables
-        var searchLikesArray = [];
-        var searchTerm = "";
-        var ridArray = [];
-        var ridSearch = null;
-        var finalRecipe = {};
         var finalRecipeArray = [];
         var calId = "";
+        var d = new Date();
+        var startTime = [];
+        var endTime = [];
 
+        this.setDates = function(){
+          var rDate = ((d.getDate()) + startTime.length)
+          d.setDate(rDate);
+          d.setHours(18);
+          d.setMinutes(00);
+          d.setSeconds(00);
+          console.log(d)
+          startTime.push(d.toISOString());
+          d.setHours(19);
+          console.log(d)
+          endTime.push(d.toISOString());
+        };
 
         this.getCalList = function(){
         //setting empty variables for calendar ops
@@ -70,8 +80,17 @@ app.controller('RecipeCtrl',
           };
 
         this.authorizeGcal();
+        this.setDates();
+        this.setDates();
+        this.setDates();
+        this.setDates();
+        this.setDates();
+        this.setDates();
+        this.setDates();
 
         this.getRecipes = function(){
+          var ridArray = [];
+          var ridSearch = null;
           var b = 0;
           var iterator = 0;
           var bestRids = [];
@@ -97,10 +116,8 @@ app.controller('RecipeCtrl',
                     $http.get(
                       'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                         ).success(function(objectA) {
-                          this.finalRecipe = objectA.recipe;
-                          finalRecipeArray.push(this.finalRecipe);
+                          finalRecipeArray.push(objectA.recipe);
                           console.log(finalRecipeArray);
-
                         }
                         )
                   b++
@@ -110,37 +127,18 @@ app.controller('RecipeCtrl',
             }
           }
 
-
-// EVERYTHING ABOVE WORKS KIND OF. FOR THE LOVE OF GOD DON'T FUCK IT UP.
-
-        //more empty variables for setDates function
-        this.megaFire = function(){
-            var d = new Date();
-            var startTime = [];
-            var endTime = [];
-            var setDates = function(z){
-              var rDate = ((d.getDate()) + z)
-              d.setDate(rDate);
-              d.setHours(18);
-              d.setMinutes(00);
-              d.setSeconds(00);
-              console.log(d)
-              startTime.push(d.toISOString());
-              d.setHours(19);
-              console.log(d)
-              endTime.push(d.toISOString());
-            };
+        var megaFire = function(){
             var dinner = {
               "kind": "calendar#event",
               "htmlLink": finalRecipeArray[0].source_url,
               "summary": finalRecipeArray[0].title,
               "description": finalRecipeArray[0].ingredients.join(', '),
               "start": {
-                "dateTime": startTime.toString(),
+                "dateTime": startTime[0].toString(),
                 "timeZone": 'America/Chicago'
               },
               "end": {
-                "dateTime": endTime.toString(),
+                "dateTime": endTime[0].toString(),
                 "timeZone": 'America/Chicago'
               },
 
@@ -158,14 +156,15 @@ app.controller('RecipeCtrl',
                 "url": finalRecipeArray[0].source_url
               }
             };
-            gapi.client.calendar.events.list({
+            var requestEvents = gapi.client.calendar.events.list({
               'calendarId': calId,
-              'timeMax': startTime.toString(),
-              'timeMin': endTime.toString()
-            }).execute(function(respE){
+              'timeMax': startTime[0].toString(),
+              'timeMin': endTime[0].toString()
+            });
+
+            requestEvents.execute(function(respE){
               console.log(respE);
               if (respE.etag = '""0""'){
-                setDates();
                 gapi.client.calendar.events.insert({
                     'calendarId': calId,
                     'resource': dinner
@@ -177,12 +176,20 @@ app.controller('RecipeCtrl',
                   console.log("Robots have already planned!");
               }
             })
-            finalRecipeArray.unshift();
-            if(finalRecipeArray.length > 0){
-              this.megaFire();
-            }
-          //end of doWhile statement;
-        } //end of megaFire
+            setTimeout(delayMegaFire(), 1000);
+          }; //end of doWhile statement;
+        // } //end of megaFire
+
+          var delayMegaFire = function(){
+          startTime.shift();
+          endTime.shift();
+          finalRecipeArray.shift();
+          megaFire();
+        }
+
+        this.megaFire = function(){
+          megaFire();
+        }
 
     }
   ]
