@@ -115,8 +115,8 @@ app.controller('RecipeCtrl',
 
         //more empty variables for setDates function
         this.megaFire = function(){
-          var z = 0;
-          do {
+          // var z = 0;
+          for (var z = 0; z < finalRecipeArray.length;) {
             var d = new Date();
             var startTime = [];
             var endTime = [];
@@ -167,9 +167,7 @@ app.controller('RecipeCtrl',
               'calendarId': calId,
               'timeMax': startTime.toString(),
               'timeMin': endTime.toString()
-            });
-
-            requestEvents.execute(function(respE){
+            }).execute(function(respE){
               console.log(respE);
               if (respE.etag = '""0""'){
                 var requestCreation = gapi.client.calendar.events.insert({
@@ -185,7 +183,7 @@ app.controller('RecipeCtrl',
               }
             })
             z++
-          } while (z < finalRecipeArray.length); //end of doWhile statement;
+          } //end of doWhile statement;
         } //end of megaFire
 
     }
