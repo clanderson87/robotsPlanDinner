@@ -115,12 +115,10 @@ app.controller('RecipeCtrl',
 
         //more empty variables for setDates function
         this.megaFire = function(){
-          // var z = 0;
-          for (var z = 0; z < finalRecipeArray.length;) {
             var d = new Date();
             var startTime = [];
             var endTime = [];
-            var setDates = function(){
+            var setDates = function(z){
               var rDate = ((d.getDate()) + z)
               d.setDate(rDate);
               d.setHours(18);
@@ -132,13 +130,11 @@ app.controller('RecipeCtrl',
               console.log(d)
               endTime.push(d.toISOString());
             };
-            setDates();
-
             var dinner = {
               "kind": "calendar#event",
-              "htmlLink": finalRecipeArray[z].source_url,
-              "summary": finalRecipeArray[z].title,
-              "description": finalRecipeArray[z].ingredients.join(', '),
+              "htmlLink": finalRecipeArray[0].source_url,
+              "summary": finalRecipeArray[0].title,
+              "description": finalRecipeArray[0].ingredients.join(', '),
               "start": {
                 "dateTime": startTime.toString(),
                 "timeZone": 'America/Chicago'
@@ -158,23 +154,22 @@ app.controller('RecipeCtrl',
                 ]
               },
               "source": {
-                "title": finalRecipeArray[z].title,
-                "url": finalRecipeArray[z].source_url
+                "title": finalRecipeArray[0].title,
+                "url": finalRecipeArray[0].source_url
               }
             };
-
-            var requestEvents = gapi.client.calendar.events.list({
+            gapi.client.calendar.events.list({
               'calendarId': calId,
               'timeMax': startTime.toString(),
               'timeMin': endTime.toString()
             }).execute(function(respE){
               console.log(respE);
               if (respE.etag = '""0""'){
-                var requestCreation = gapi.client.calendar.events.insert({
+                setDates();
+                gapi.client.calendar.events.insert({
                     'calendarId': calId,
                     'resource': dinner
-                  })
-                requestCreation.execute(function(respEC){
+                  }).execute(function(respEC){
                   console.log(respEC)
                   console.log("Event created successfully");
                 })
@@ -182,8 +177,11 @@ app.controller('RecipeCtrl',
                   console.log("Robots have already planned!");
               }
             })
-            z++
-          } //end of doWhile statement;
+            finalRecipeArray.unshift();
+            if(finalRecipeArray.length > 0){
+              this.megaFire();
+            }
+          //end of doWhile statement;
         } //end of megaFire
 
     }
