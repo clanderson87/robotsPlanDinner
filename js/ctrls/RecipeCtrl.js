@@ -7,6 +7,7 @@ app.controller('RecipeCtrl',
   '$window',
   'LoginFctry',
   'gapiService',
+  '$location',
 
     function(
       $firebaseArray,
@@ -15,7 +16,8 @@ app.controller('RecipeCtrl',
       $http,
       $window,
       loginFctry,
-      gapiService) {
+      gapiService,
+      $location) {
 
         //Firebase code
         var ref = new Firebase("https://rpd.firebaseio.com");
@@ -29,6 +31,7 @@ app.controller('RecipeCtrl',
 
         //Opening Empty Variables
         var finalRecipeArray = [];
+        var makeListArray = [];
         var calId = "";
         var startTime = [];
         var endTime = [];
@@ -113,6 +116,10 @@ app.controller('RecipeCtrl',
                       'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                         ).success(function(objectA) {
                           finalRecipeArray.push(objectA.recipe);
+                          objectA.recipe.ingredients.forEach(function(item){
+                            makeListArray.push(item);
+                          });
+                          console.log(makeListArray);
                           console.log(finalRecipeArray);
                         }
                         )
@@ -121,12 +128,13 @@ app.controller('RecipeCtrl',
                   }
                   })
             }
-          }
+          };
+
+        this.getRecipes();
 
         var megaFire = function(){
             var dinner = {
               "kind": "calendar#event",
-              "htmlLink": finalRecipeArray[0].source_url,
               "summary": finalRecipeArray[0].title,
               "description": finalRecipeArray[0].ingredients.join(', '),
               "start": {
@@ -172,20 +180,17 @@ app.controller('RecipeCtrl',
                   console.log("Robots have already planned!");
               }
             })
-            setTimeout(delayMegaFire(), 1000);
+            delayMegaFire();
+            $location.path('/list');
           }; //end of doWhile statement;
         // } //end of megaFire
 
-          var delayMegaFire = function(){
-          if (finalRecipeArray.length > 0){
-          startTime.shift();
-          endTime.shift();
-          finalRecipeArray.shift();
-          megaFire();
-        } else {
-          $location.path('/list')
-        }
-        }
+      var delayMegaFire = function(){
+            startTime.shift();
+            endTime.shift();
+            finalRecipeArray.shift();
+            megaFire();
+          }
 
         this.megaFire = function(){
           megaFire();

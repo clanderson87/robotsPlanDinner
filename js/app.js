@@ -56,9 +56,14 @@ app.config(['$routeProvider', function($routeProvider){
     .when('/pref3', {
       templateUrl: 'partials/options.html',
       controller: 'PrefCtrl as prefCtrl'
-  })
+    })
+  //route for ajax (f2f and google) logic
+    .when('/fire', {
+      templateUrl: 'partials/fireTemp.html',
+      controller: 'RecipeCtrl as recipeCtrl'
+    })
   //route for shopping list
-    .when('/shoppingList', {
+    .when('/list', {
       templateUrl: 'partials/list.html',
       controller: 'RecipeCtrl as recipeCtrl'
     })
