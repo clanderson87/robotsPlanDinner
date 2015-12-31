@@ -30,21 +30,23 @@ app.controller('RecipeCtrl',
         //Opening Empty Variables
         var finalRecipeArray = [];
         var calId = "";
-        var d = new Date();
         var startTime = [];
         var endTime = [];
 
         this.setDates = function(){
-          var rDate = ((d.getDate()) + startTime.length)
-          d.setDate(rDate);
-          d.setHours(18);
-          d.setMinutes(00);
-          d.setSeconds(00);
-          console.log(d)
-          startTime.push(d.toISOString());
-          d.setHours(19);
-          console.log(d)
-          endTime.push(d.toISOString());
+          for(var p = 1; p < 8; p++){
+            var d = new Date();
+            var rDate = ((d.getDate()) + p)
+            d.setDate(rDate);
+            d.setHours(18);
+            d.setMinutes(00);
+            d.setSeconds(00);
+            console.log(d)
+            startTime.push(d.toISOString());
+            d.setHours(19);
+            console.log(d)
+            endTime.push(d.toISOString());
+          }
         };
 
         this.getCalList = function(){
@@ -80,12 +82,6 @@ app.controller('RecipeCtrl',
           };
 
         this.authorizeGcal();
-        this.setDates();
-        this.setDates();
-        this.setDates();
-        this.setDates();
-        this.setDates();
-        this.setDates();
         this.setDates();
 
         this.getRecipes = function(){
@@ -181,10 +177,14 @@ app.controller('RecipeCtrl',
         // } //end of megaFire
 
           var delayMegaFire = function(){
+          if (finalRecipeArray.length > 0){
           startTime.shift();
           endTime.shift();
           finalRecipeArray.shift();
           megaFire();
+        } else {
+          $location.path('/list')
+        }
         }
 
         this.megaFire = function(){
