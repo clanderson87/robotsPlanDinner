@@ -31,10 +31,15 @@ app.controller('RecipeCtrl',
 
         //Opening Empty Variables
         var finalRecipeArray = [];
-        var makeListArray = [];
+        var firstItemArray = [];
+        var finalItemArray = [];
         var calId = "";
         var startTime = [];
         var endTime = [];
+
+        this.finalRecipeArray = finalRecipeArray;
+        this.firstItemArray = firstItemArray;
+        this.finalItemArray = finalItemArray;
 
         this.setDates = function(){
           for(var p = 1; p < 8; p++){
@@ -84,15 +89,14 @@ app.controller('RecipeCtrl',
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.getCalList);
           };
 
-        this.authorizeGcal();
-        this.setDates();
-
         this.getRecipes = function(){
           var ridArray = [];
           var ridSearch = null;
           var b = 0;
           var iterator = 0;
           var bestRids = [];
+          var cookingTerms = /(tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|chopped|pinch|diced|rinsed|drained|minced|toasted|ground|\sand\s|1\s)/gi;
+          var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
@@ -117,22 +121,27 @@ app.controller('RecipeCtrl',
                         ).success(function(objectA) {
                           finalRecipeArray.push(objectA.recipe);
                           objectA.recipe.ingredients.forEach(function(item){
-                            makeListArray.push(item);
+                            var filteredItem = item.replace(cookingTerms, subst);
+                            firstItemArray.push(filteredItem);
                           });
-                          console.log(makeListArray);
                           console.log(finalRecipeArray);
                         }
                         )
                   b++
                   }
                   }
-                  })
+                })
             }
           };
 
+
+        this.authorizeGcal();
+        this.setDates();
         this.getRecipes();
 
         var megaFire = function(){
+          this.finalItemArray = firstItemArray;
+          console.log(this.finalItemArray);
             var dinner = {
               "kind": "calendar#event",
               "summary": finalRecipeArray[0].title,
@@ -181,9 +190,7 @@ app.controller('RecipeCtrl',
               }
             })
             delayMegaFire();
-            $location.path('/list');
-          }; //end of doWhile statement;
-        // } //end of megaFire
+          };
 
       var delayMegaFire = function(){
             startTime.shift();
@@ -192,9 +199,13 @@ app.controller('RecipeCtrl',
             megaFire();
           }
 
-        this.megaFire = function(){
+      this.megaFire = function(){
           megaFire();
-        }
+      }
+
+      this.delayMegaFire = function(){
+          delayMegaFire();
+      }
 
     }
   ]
