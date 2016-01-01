@@ -95,7 +95,7 @@ app.controller('RecipeCtrl',
           var b = 0;
           var iterator = 0;
           var bestRids = [];
-          var cookingTerms = /(tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|chopped|pinch|diced|rinsed|drained|minced|toasted|ground|\sand\s|1\s)/gi;
+          var cookingTerms = /(tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|pinch\s|diced\s|rinsed\s|jars|jar|ounces|ounce|whole|drained\s|minced\s|toasted\s|ground\s|finely\s|quartered\s|and\s|1\s|\d+[\/.]\d+?\s|of\s|lightly\s|packed\s|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s(up\sto\syou)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\dg|grams|gram|milliliters|milliliter|millilitres|millilitre|\dml|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
