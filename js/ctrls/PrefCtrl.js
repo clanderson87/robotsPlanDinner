@@ -57,7 +57,7 @@ app.controller('PrefCtrl',
           for (var i = userAllergies.length - 1; i >= 0; i--) {
             ref.child("allergies").child(userAllergies[i]).set(user);
           };
-          $location.path('/list');
+          $location.path('/fire');
         }
 
         this.pushDays = function(index){

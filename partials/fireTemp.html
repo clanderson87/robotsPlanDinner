@@ -1,0 +1,8 @@
+<div ng-controller="RecipeCtrl as recipeCtrl"><button ng-click="recipeCtrl.getRecipes()">Get Term</button>
+<button ng-click="recipeCtrl.megaFire()">Assign Recipe</button>
+<div ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">
+    -{{item}}
+  </div>
+</div>
+
+
