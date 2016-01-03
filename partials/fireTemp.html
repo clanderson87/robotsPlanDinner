@@ -1,7 +1,12 @@
-<div ng-controller="RecipeCtrl as recipeCtrl"><button ng-click="recipeCtrl.getRecipes()">Get Term</button>
-<button ng-click="recipeCtrl.megaFire()">Assign Recipe</button>
-<div ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">
-    -{{item}}
+<div ng-controller="RecipeCtrl as recipeCtrl">
+  <div class = "container">
+    <h2 class ="center-align">do things</h2>
+    <p><button class = "waves-effect waves-light btn" ng-click="recipeCtrl.getRecipes()">Create List</button>
+    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire()"><span class="fa fa-calendar-plus-o"> </span> Push to calendar</button>
+    <a href = "http://calendar.google.com" class = "waves-effect waves-light btn">go to calendar</a></p>
+    <ul class="collection">
+      <li class="collection-item" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}}</li>
+    </ul>
   </div>
 </div>
 

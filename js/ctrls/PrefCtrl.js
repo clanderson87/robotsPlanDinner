@@ -13,7 +13,7 @@ app.controller('PrefCtrl',
         var user = auth.uid;
 
         // possible arrays
-        var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
+        var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
         var possibleAllergies = ["Peanut", "Shellfish", "Gluten"]
         var daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         // var possibleHatred = ["I hate", "I loathe", ]
@@ -52,7 +52,7 @@ app.controller('PrefCtrl',
           for (var i = possibleLikes.length - 1; i >= 0; i--) {
             ref.child("likes").child(possibleLikes[i]).set(user);
           };
-          $location.path('/pref2');
+          $location.path('/fire');
         };
 
         this.addAllergiesToUser = function(){

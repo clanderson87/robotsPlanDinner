@@ -95,7 +95,7 @@ app.controller('RecipeCtrl',
           var b = 0;
           var iterator = 0;
           var bestRids = [];
-          var cookingTerms = /(\(|\)|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|pound\s|pounds\s|pinch\s|diced\s|rinsed\s|jars\s|jar\s|ounces\s|ounce\s|\d\ounce\s|1ounce\s|2ounces\s|whole\s|drained\s|minced\s|lbs\s|lb\s|toasted\s|ground\s|finely\s|quartered\s|and\s|1\s|\d+[\/.]\d+?\s|of\s|lightly\s|packed\s|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|\dml\s|\d\s|,)/gi;
+          var cookingTerms = /(\(|\)|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|pound\s|pounds\s|pinch\s|diced\s|rinsed\s|jars\s|jar\s|ounces\s|ounce\s|\d\ounce\s|1ounce\s|2ounces\s|whole\s|drained\s|minced\s|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|lbs\s|lb\s|toasted\s|ground\s|finely\s|quartered\s|and\s|1\s|\d+[\/.]\d+?\s|of\s|lightly\s|packed\s|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|\dml\s|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
