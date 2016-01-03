@@ -16,6 +16,7 @@ app.controller('PrefCtrl',
         var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese"];
         var possibleAllergies = ["Peanut", "Shellfish", "Gluten"]
         var daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        // var possibleHatred = ["I hate", "I loathe", ]
 
         // empty variables:
         var userAllergies = [];
@@ -27,6 +28,7 @@ app.controller('PrefCtrl',
         var mealTimeEnd = new Date();
         var daysToSkip = [];
         var daysToPlan;
+
 
         this.possibleLikes = possibleLikes;
         this.possibleAllergies = possibleAllergies;
