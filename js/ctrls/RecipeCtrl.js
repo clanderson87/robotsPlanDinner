@@ -37,12 +37,14 @@ app.controller('RecipeCtrl',
         var calId = "";
         var startTime = [];
         var endTime = [];
+        var loading = [];
 
         this.reallyFinalRecipeArray = reallyFinalRecipeArray;
         this.finalRecipeArray = finalRecipeArray;
         this.firstItemArray = firstItemArray;
         this.finalItemArray = finalItemArray;
         this.endTime = endTime;
+        this.loading = loading;
 
         this.setDates = function(){
           for(var p = 1; p < 8; p++){
@@ -69,7 +71,7 @@ app.controller('RecipeCtrl',
                 calId = summaryArray[v].toString();
                 console.log(calId);
             } else {
-              var requestCals = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners'}).execute(function(respC){
+              var requestCals = gapi.client.calendar.calendars.insert({'summary':'RobotPlannedDinners', 'description': "meal planning for the lazy type-A's in all of us"}).execute(function(respC){
                   console.log(respC);
                   calId = respC.id;
                   console.log(calId)
@@ -93,12 +95,13 @@ app.controller('RecipeCtrl',
           };
 
         this.getRecipes = function(){
+          this.loading.push(1)
           var ridArray = [];
           var ridSearch = null;
           var b = 0;
           var iterator = 0;
           var bestRids = [];
-          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
+          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|may\s|may|need\s|need|additional\s|additional|depending\s|depending|texture\s|texture|ew\s|we|use\s|use|consistancy\s|consistancy|time\s|time|you\s|you|add\s|add|at\s|at|for\s|for|the\s|the|room\s|room|temperature\s|temperature|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|deseeded\s|deseeded|seeded\s|seeded|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
@@ -131,21 +134,22 @@ app.controller('RecipeCtrl',
                             firstItemArray.push(filteredItem);
                           })
                           console.log(finalRecipeArray);
-                          console.log(reallyFinalRecipeArray)
+                          console.log(reallyFinalRecipeArray);
+                          loading.pop();
                         }
                         )
                   bestRids.splice(y, 1);
                   b++
                   }
                   }
-                })
-            }
+                });
+            };
           };
 
 
         this.authorizeGcal();
         this.setDates();
-        console.log(this.getRecipes);
+
 
         var megaFire = function(){
           this.finalItemArray = firstItemArray;
