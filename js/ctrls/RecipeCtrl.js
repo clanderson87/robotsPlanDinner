@@ -95,7 +95,7 @@ app.controller('RecipeCtrl',
           var b = 0;
           var iterator = 0;
           var bestRids = [];
-          var cookingTerms = /(\(|\)|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pound\s|pinch\s|diced\s|diced|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|1\s|\d+[\/.]\d+?\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|\dml\s|\d\s|,)/gi;
+          var cookingTerms = /(\(|\)|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pound\s|pinch\s|diced\s|diced|thin\s|thin|thinly\s|thinly|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|\d+[\/.]\d+?\s|[0-9]|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|\dml\s|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
@@ -109,13 +109,15 @@ app.controller('RecipeCtrl',
             }).then(function() {
               if (iterator >= (likesArray.length * 30)) {
                 ridArray.forEach(function(recipe) {
-                  if(recipe.social_rank >= 99 && recipe.publisher === "All Recipes"){
-                    bestRids.push(recipe.recipe_id)
+                  if(recipe.social_rank >= 99){
+                    bestRids.push(recipe.recipe_id);
+                    console.log(bestRids)
                   }
                 });
                 while (b <= 6) {
                   y = Math.floor((Math.random() * bestRids.length));
                     ridSearch = bestRids[y];
+                    console.log(bestRids[y])
                     $http.get(
                       'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                         ).success(function(objectA) {
@@ -127,6 +129,7 @@ app.controller('RecipeCtrl',
                           console.log(finalRecipeArray);
                         }
                         )
+                  // bestRids.splice(y, 1);
                   b++
                   }
                   }
