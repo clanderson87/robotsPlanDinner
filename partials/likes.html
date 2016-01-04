@@ -2,8 +2,21 @@
   <div class = "container">
     <h2 class ="center-align">choose cuisenes you hate</h2>
     <p><button class = "waves-effect waves-light btn likes" ng-click = "prefCtrl.removeLikes($index)" ng-repeat = "possibleLike in prefCtrl.possibleLikes">{{possibleLike}}</button></p>
-    <br/><p>i don't hate {{prefCtrl.possibleLikes.join(", ").replace(prefCtrl.possibleLikes[prefCtrl.possibleLikes.length - 1], "").toLowerCase()}} or {{prefCtrl.possibleLikes[prefCtrl.possibleLikes.length - 1].toLowerCase()}} foods.</p>
-    <p><button class = "waves-effect waves-teal btn-flat" ng-click = "prefCtrl.addLikesToUser()"><span class = "fa fa-plus fa-2x"> </span> Feed me, dammit.</button>
+    <br/>
+
+    <p>i don't hate {{prefCtrl.possibleLikes.join(", ").replace(prefCtrl.possibleLikes[prefCtrl.possibleLikes.length - 1], "").toLowerCase()}} or {{prefCtrl.possibleLikes[prefCtrl.possibleLikes.length - 1].toLowerCase()}} foods.<br/>
+    <span ng-show = "prefCtrl.hateThese.length > 0">but this stuff sucks:</span></p>
+
+    <div class = "suckZone">
+      <p>
+        <button class = "waves-effect waves-light btn grey lighten-1" ng-repeat = "hated in prefCtrl.hateThese" ng-click = "prefCtrl.undoHate($index)">
+          <s>{{hated}} food</s>
+        </button>
+      </p>
+    </div>
+
+    <p><button class = "waves-effect waves-light btn likes" ng-show = "prefCtrl.hateThese.length > 0" ng-click = "prefCtrl.resetLikes()">crap, reset likes</button>
+    <button class = "waves-effect waves-teal btn-flat" ng-click = "prefCtrl.addLikesToUser()"><span class = "fa fa-plus fa-2x"> </span> just feed me, dammit.</button>
   </div>
   <ng-include
 </div>

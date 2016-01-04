@@ -94,6 +94,10 @@ app.controller('RecipeCtrl',
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.getCalList);
           };
 
+        this.backToLikes = function(){
+          $location.path('/pref1');
+        };
+
         this.getRecipes = function(){
           this.loading.push(1)
           var ridArray = [];
