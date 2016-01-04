@@ -1,15 +1,24 @@
 <div ng-controller="RecipeCtrl as recipeCtrl">
   <div class = "container">
     <h2 class ="center-align">do things</h2>
+
+    <!--fun with buttons -->
+
     <p><button class = "waves-effect waves-light btn" ng-click="recipeCtrl.getRecipes(); a = !a" ng-show = "!a">Create shopping List</button><br/>
-    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire()" ng-show="a"><span class="fa fa-calendar-plus-o"> </span> Push to calendar</button><br/>
-    <a href = "http://calendar.google.com" class = "waves-effect waves-light btn" ng-show = "!true">go to calendar</a></p>
+
+    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> Push to calendar</button><br/>
+
+    <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="a" ng-hide="recipeCtrl.finalRecipeArray.length > 0"></span>
+
+    <a href = "http://calendar.google.com" target="_blank" class = "waves-effect waves-light btn" ng-show = "recipeCtrl.endTime.length < 2">go to calendar</a></p>
+
+
     <div class="row">
-      <ul class="collection col s7 push-s5" ng-show = "a">
+      <ul class="collection col s7 push-s5" ng-show = "recipeCtrl.reallyFinalRecipeArray.length > 0">
         <li class="collection-item" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}}</li>
       </ul>
       <div class="col s5 pull-s7">
-        <div class="card small" ng-repeat = "recipe in recipeCtrl.finalRecipeArray | unique track by $index">
+        <div class="card small" ng-repeat = "recipe in recipeCtrl.reallyFinalRecipeArray | unique track by $index">
           <div class="card-image">
             <img src= "{{recipe.image_url}}">
             <span class="card-title">{{recipe.title}}</span>

@@ -30,6 +30,7 @@ app.controller('RecipeCtrl',
         var likesArray = $firebaseArray(likesRef);
 
         //Opening Empty Variables
+        var reallyFinalRecipeArray = []
         var finalRecipeArray = [];
         var firstItemArray = [];
         var finalItemArray = [];
@@ -37,9 +38,11 @@ app.controller('RecipeCtrl',
         var startTime = [];
         var endTime = [];
 
+        this.reallyFinalRecipeArray = reallyFinalRecipeArray;
         this.finalRecipeArray = finalRecipeArray;
         this.firstItemArray = firstItemArray;
         this.finalItemArray = finalItemArray;
+        this.endTime = endTime;
 
         this.setDates = function(){
           for(var p = 1; p < 8; p++){
@@ -95,7 +98,7 @@ app.controller('RecipeCtrl',
           var b = 0;
           var iterator = 0;
           var bestRids = [];
-          var cookingTerms = /(\(|\)|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pound\s|pinch\s|diced\s|diced|thin\s|thin|thinly\s|thinly|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|\d+[\/.]\d+?\s|[0-9]|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|\dml\s|\d\s|,)/gi;
+          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|seeded\s|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
@@ -122,14 +125,16 @@ app.controller('RecipeCtrl',
                       'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                         ).success(function(objectA) {
                           finalRecipeArray.push(objectA.recipe);
+                          reallyFinalRecipeArray.push(objectA.recipe);
                           objectA.recipe.ingredients.forEach(function(item){
                             var filteredItem = item.replace(cookingTerms, subst).toLowerCase();
                             firstItemArray.push(filteredItem);
                           })
                           console.log(finalRecipeArray);
+                          console.log(reallyFinalRecipeArray)
                         }
                         )
-                  // bestRids.splice(y, 1);
+                  bestRids.splice(y, 1);
                   b++
                   }
                   }
@@ -140,7 +145,7 @@ app.controller('RecipeCtrl',
 
         this.authorizeGcal();
         this.setDates();
-        this.getRecipes();
+        console.log(this.getRecipes);
 
         var megaFire = function(){
           this.finalItemArray = firstItemArray;
