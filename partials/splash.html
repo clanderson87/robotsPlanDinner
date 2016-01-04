@@ -1,7 +1,12 @@
 <div ng-controller="AuthCtrl as authCtrl">
-  <!--<ng-include src="partials/componenets/navbar.html"></ng-include>-->
-  <!--<ng-include src="partials/componenets/wrapper.html"></ng-include>-->
-  <div class="g-signin2"><button ng-click="authCtrl.login()">Let the robots plan</button></div>
-  <div id = "authorize-div"></div>
+  <div class = "container">
+    <h1>robots plan dinner</h1>
+    <p>a limited input meal-planner for the lazy type-A's in all of us.</p>
+    <!--<ng-include src="partials/componenets/navbar.html"></ng-include>-->
+    <!--<ng-include src="partials/componenets/wrapper.html"></ng-include>-->
+    <p><button ng-click="authCtrl.login()" class="waves-effect waves-teal btn-flat"><span class = "fa fa-google fa-2x"> | </span> Sign in with Google</button></p>
+    <div id = "authorize-div"></div>
+  </div>
+  <!-- <ng-include src="'partials/components/footer.html'"></ng-include> -->
 </div>
 

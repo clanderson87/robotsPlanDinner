@@ -1,8 +1,39 @@
-<div ng-controller="RecipeCtrl as recipeCtrl"><button ng-click="recipeCtrl.getRecipes()">Get Term</button>
-<button ng-click="recipeCtrl.megaFire()">Assign Recipe</button>
-<div ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">
-    -{{item}}
-  </div>
+<div ng-controller="RecipeCtrl as recipeCtrl">
+  <div class = "container">
+    <h2 class ="center-align">click the buttons</h2>
+
+    <!--fun with buttons -->
+
+    <p><button class = "waves-effect waves-light btn" ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</button><br/>
+
+    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</button><br/>
+
+    <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
+
+    <a href = "http://calendar.google.com" target="_blank" class = "waves-effect waves-teal btn-flat" ng-show = "recipeCtrl.endTime.length < 2">go to my calendar</a></p>
+
+
+    <div class="row">
+      <ul class="collection col s7 push-s5" ng-show = "recipeCtrl.reallyFinalRecipeArray.length > 0">
+        <li class="collection-item" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}}</li>
+      </ul>
+      <div class="col s5 pull-s7">
+        <div class="card small" ng-repeat = "recipe in recipeCtrl.reallyFinalRecipeArray | unique track by $index">
+          <div class="card-image">
+            <img src= "{{recipe.image_url}}">
+            <span class="card-title">{{recipe.title}}</span>
+          </div>
+          <div class="card-content">
+            <p>{{recipe.ingredients.join(', ')}}</p>
+          </div>
+          <div class="card-action">
+            <a href="{{recipe.source_url}}">{{recipe.publisher}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--     <ng-include src="'partials/components/footer.html'"></ng-include>
+ -->  </div>
 </div>
 
 
