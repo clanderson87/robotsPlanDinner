@@ -20,6 +20,7 @@ app.controller('PrefCtrl',
 
         // empty variables:
         var userAllergies = [];
+        var hateThese = [];
         var mealTime = new Date();
           mealTime.setMinutes(30);
           mealTime.setSeconds(00);
@@ -33,15 +34,29 @@ app.controller('PrefCtrl',
         this.possibleLikes = possibleLikes;
         this.possibleAllergies = possibleAllergies;
         this.userAllergies = userAllergies;
+        this.hateThese = hateThese;
         this.mealTime = mealTime;
         this.mealTimeEnd = mealTimeEnd;
         this.daysArray = daysArray;
         this.daysToSkip = daysToSkip;
         this.daysToPlan =  daysToPlan;
 
+        this.resetLikes = function() {
+          for (var i = hateThese.length - 1; i >= 0; i--) {
+            this.possibleLikes.push(hateThese[i])
+            this.hateThese.splice([i], 1);
+          };
+        }
+
         this.removeLikes = function(index) {
+          this.hateThese.push(possibleLikes[index]);
           this.possibleLikes.splice(index, 1);
         };
+
+        this.undoHate = function(index) {
+          this.possibleLikes.push(hateThese[index]);
+          this.hateThese.splice(index, 1)
+        }
 
         this.pushAllergies = function(index) {
           this.userAllergies.push(possibleAllergies.slice(index, (index+1)).toString())
