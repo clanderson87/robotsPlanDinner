@@ -42,6 +42,8 @@ app.controller('PrefCtrl',
         this.daysToPlan =  daysToPlan;
 
         this.resetLikes = function() {
+          // this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
+          // this.hateThese = [];
           for (var i = hateThese.length - 1; i >= 0; i--) {
             this.possibleLikes.push(hateThese[i])
             this.hateThese.splice([i], 1);
