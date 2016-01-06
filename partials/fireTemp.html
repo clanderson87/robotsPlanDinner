@@ -4,16 +4,18 @@
 
     <!--fun with buttons -->
 
-    <p> <button class = "waves-effect waves-light btn" ng-hide = "recipeCtrl.loading.length > 0">
-          <span ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</span>
-          <span ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</span>
-          <a href = "http://calendar.google.com" target="_blank"  ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a>
-        </button><br/>
+    <p>
+      <button class = 'waves-effect waves-light btn' ng-hide = "recipeCtrl.loading.length > 0">
+        <span ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</span>
+        <span ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</span>
+        <a href = "http://calendar.google.com" target="_blank" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a>
+      </button>
 
     <!-- <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</button> -->
-    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
+      <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
 
-    <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
+      <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
+    </p>
 
     <!-- <a href = "http://calendar.google.com" target="_blank" class = "waves-effect waves-teal btn-flat" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a></p> -->
 

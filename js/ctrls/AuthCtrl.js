@@ -1,7 +1,6 @@
 app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject", "LoginFctry",
   function($firebaseAuth, $location, $firebaseObject, loginFctry) {
 
-
 //Add empty currentUser
 var currentUser = null;
 
