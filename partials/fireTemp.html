@@ -3,9 +3,9 @@
     <h1 class ="center-align">
       <span class = "btnText">
         <span ng-hide = "a">click the button</span>
-        <span ng-show = "recipeCtrl.loading.length > 0">watch the spinny thing</span>
+        <span ng-show = "recipeCtrl.loading.length > 0">watch the spinny</span>
         <span ng-show = "recipeCtrl.finalRecipeArray.length > 0">look tasty?</span>
-        <span ng-show = "recipeCtrl.endTime.length < 2">Good. Now Leave.</span>
+        <span ng-show = "recipeCtrl.endTime.length < 2">good. now leave.</span>
       </span>
     </h1>
 
@@ -41,8 +41,8 @@
           <div class="card-content">
             <p>{{recipe.ingredients.join(', ')}}</p>
           </div>
-          <div class="card-action">
-            <a href="{{recipe.source_url}}" target="_blank">{{recipe.publisher}}</a>
+          <div class="card-action showem">
+            <a href="{{recipe.source_url}}" target="_blank">{{recipe.publisher}}</a><i class="material-icons right align showme" ng-click="recipeCtrl.removeRecipeTryAgain($index)">close</i>
           </div>
         </div>
       </div>

@@ -29,6 +29,10 @@ app.controller('RecipeCtrl',
         var likesRef = ref.child("likes").orderByValue().equalTo(user);
         var likesArray = $firebaseArray(likesRef);
 
+        //cooking terms and substitutions
+        var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|may\s|need\s|need|additional\s|additional|depending\s|depending|texture\s|texture|we\s|use\s|use|consistancy\s|consistancy|time\s|time|you\s|you|add\s|add|at\s|for\s|for|the\s|the|room\s|temperature\s|temperature|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|deseeded\s|deseeded|seeded\s|seeded|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
+        var subst = '';
+
         //Opening Empty Variables
         var reallyFinalRecipeArray = []
         var finalRecipeArray = [];
@@ -95,6 +99,25 @@ app.controller('RecipeCtrl',
           this.firstItemArray.splice(index, 1);
         }
 
+        this.removeRecipeTryAgain = function(index){
+          firstItemArray.splice(0, firstItemArray.length);
+          finalRecipeArray.splice(index, 1);
+          reallyFinalRecipeArray.splice(index, 1);
+          y = Math.floor((Math.random() * bestRids.length));
+          $http.get(
+            'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + bestRids[y]
+          ).success(function(obj) {
+            finalRecipeArray.splice(index, 0, obj.recipe);
+            reallyFinalRecipeArray.splice(index, 0, obj.recipe);
+            finalRecipeArray.forEach(function(recipe){
+              recipe.ingredients.forEach(function(item){
+              var filteredItem = item.replace(cookingTerms, subst).toLowerCase();
+              firstItemArray.push(filteredItem);
+              })
+            })
+          })
+        }
+
         this.authorizeGcal = function(){
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, this.getCalList);
           };
@@ -103,14 +126,13 @@ app.controller('RecipeCtrl',
           $location.path('/pref1');
         };
 
+
         this.getRecipes = function(){
           this.loading.push(1)
           var ridArray = [];
           var ridSearch = null;
           var b = 0;
           var iterator = 0;
-          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|may\s|need\s|need|additional\s|additional|depending\s|depending|texture\s|texture|we\s|use\s|use|consistancy\s|consistancy|time\s|time|you\s|you|add\s|add|at\s|for\s|for|the\s|the|room\s|temperature\s|temperature|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|deseeded\s|deseeded|seeded\s|seeded|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
-          var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
