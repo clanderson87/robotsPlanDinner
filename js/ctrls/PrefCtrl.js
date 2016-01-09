@@ -41,7 +41,19 @@ app.controller('PrefCtrl',
         this.daysToSkip = daysToSkip;
         this.daysToPlan =  daysToPlan;
 
+        // this.zeroLikesAtFb = function(){
+        //   var zeroOne = ref.child("likes").orderByValue().equalTo(user);
+        //   var zeroTwo = zeroOne.ref();
+
+        //   // zeroTwo.remove();
+        //   console.log("yup");
+        // }
+
+        // this.zeroLikesAtFb();
+
         this.resetLikes = function() {
+          // this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
+          // this.hateThese = [];
           for (var i = hateThese.length - 1; i >= 0; i--) {
             this.possibleLikes.push(hateThese[i])
             this.hateThese.splice([i], 1);
@@ -66,6 +78,9 @@ app.controller('PrefCtrl',
           console.log(user);
           for (var i = possibleLikes.length - 1; i >= 0; i--) {
             ref.child("likes").child(possibleLikes[i]).set(user);
+          };
+          for (var j = hateThese.length -1 ; j >=0; j--){
+            ref.child("likes").child(hateThese[j]).set(null);
           };
           $location.path('/fire');
         };

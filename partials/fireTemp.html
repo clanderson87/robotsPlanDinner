@@ -1,22 +1,48 @@
 <div ng-controller="RecipeCtrl as recipeCtrl">
   <div class = "container">
-    <h2 class ="center-align">click the buttons</h2>
+    <h1 class ="center-align">
+      <span class = "btnText">
+        <span ng-hide = "a">click the button</span>
+        <span ng-show = "recipeCtrl.loading.length > 0">watch the spinny</span>
+        <span ng-show = "recipeCtrl.finalRecipeArray.length > 0">look tasty?</span>
+        <span ng-show = "recipeCtrl.endTime.length < 2">good. now leave.</span>
+      </span>
+    </h1>
+
 
     <!--fun with buttons -->
 
-    <p><button class = "waves-effect waves-light btn" ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</button><br/>
+    <p>
+      <button class = 'waves-effect waves-light btn likes' ng-hide = "recipeCtrl.loading.length > 0">
+        <span ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</span>
+        <span ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</span>
+        <a href = "http://calendar.google.com" target="_blank" class = "whiteTxt" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> | </span>go to my calendar</a>
+      </button>
 
-    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</button>
-    <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
+      <input ng-show = "recipeCtrl.endTime.length < 2" ng-model = "email" placeholder = "you@you.com">
+      <button class = 'waves-effect waves-light btn likes' ng-show = "recipeCtrl.endTime.length < 2">
+        <a href = "mailto:{{email}}?subject=Robot%20Planned%20Dinners%20for%20this%20week&body={{recipeCtrl.reallyFinalRecipeArray.recipes}},{{recipeCtrl.firstItemArray}}" class = "whiteTxt">email this list</a>
+      </button>
 
-    <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
+    <!-- <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</button> -->
+      <button class = "waves-effect waves-light btn hates" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
 
-    <a href = "http://calendar.google.com" target="_blank" class = "waves-effect waves-teal btn-flat" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a></p>
+      <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
+    </p>
+
+    <!-- <a href = "http://calendar.google.com" target="_blank" class = "waves-effect waves-teal btn-flat" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a></p> -->
 
 
     <div class="row">
       <ul class="collection col s7 push-s5" ng-show = "recipeCtrl.reallyFinalRecipeArray.length > 0">
-        <li class="collection-item" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}}</li>
+        <li class="collection-item showem" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">
+          <span ng-click = "editorEnabled = !editorEnabled">
+            <span ng-hide = "editorEnabled">{{item}}</span>
+            <a class = "showme" ng-show = "editorEnabled">done</a>
+          </span>
+          <input ng-show = "editorEnabled" ng-model ="item">
+          <i class="material-icons right align showme" ng-hide = "editorEnabled" ng-click="recipeCtrl.removeItem($index)">close</i>
+        </li>
       </ul>
       <div class="col s5 pull-s7">
         <div class="card small" ng-repeat = "recipe in recipeCtrl.reallyFinalRecipeArray | unique track by $index">
@@ -27,8 +53,8 @@
           <div class="card-content">
             <p>{{recipe.ingredients.join(', ')}}</p>
           </div>
-          <div class="card-action">
-            <a href="{{recipe.source_url}}" target="_blank">{{recipe.publisher}}</a>
+          <div class="card-action showem">
+            <a href="{{recipe.source_url}}" target="_blank">{{recipe.publisher}}</a><i class="material-icons right align showme" ng-hide = "recipeCtrl.endTime.length < 2" ng-click="recipeCtrl.removeRecipeTryAgain($index)">close</i>
           </div>
         </div>
       </div>

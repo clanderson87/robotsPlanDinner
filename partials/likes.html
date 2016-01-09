@@ -9,14 +9,17 @@
 
     <div class = "suckZone">
       <p>
-        <button class = "waves-effect waves-light btn grey lighten-1" ng-repeat = "hated in prefCtrl.hateThese" ng-click = "prefCtrl.undoHate($index)">
+        <button class = "waves-effect waves-light btn hates" ng-repeat = "hated in prefCtrl.hateThese" ng-click = "prefCtrl.undoHate($index)">
           <s>{{hated}} food</s>
         </button>
       </p>
     </div>
 
     <p><button class = "waves-effect waves-light btn likes" ng-show = "prefCtrl.hateThese.length > 0" ng-click = "prefCtrl.resetLikes()">crap, reset likes</button>
-    <button class = "waves-effect waves-teal btn-flat" ng-click = "prefCtrl.addLikesToUser()"><span class = "fa fa-plus fa-2x"> </span> just feed me, dammit.</button>
+    <button class = "waves-effect waves-teal btn-flat" ng-click = "prefCtrl.addLikesToUser()">
+      <span class = "fa fa-plus fa-2x"> </span>
+        <span ng-show = "prefCtrl.hateThese.length <= 5">just feed me, dammit.</span>
+        <span ng-show = "prefCtrl.hateThese.length >= 6">damn, I'm picky.</span>
+    </button>
   </div>
-  <ng-include
 </div>
