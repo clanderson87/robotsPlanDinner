@@ -33,10 +33,6 @@ p {
   color: #4c3f54;
 }
 
-a {
-  color: white;
-}
-
 .likes {
   background-color: #486824;
   opacity: 0.75;
@@ -62,6 +58,11 @@ a {
 .showme{
 display: none;
 }
+
 .showem:hover .showme{
 display : block;
+}
+
+.whiteTxt {
+  color: white;
 }
