@@ -1,3 +1,5 @@
+/*for page titles*/
+
 h1 {
   /*background-color: #4c3f54;*/
   /*color: #f2c057;*/
@@ -33,6 +35,8 @@ p {
   color: #4c3f54;
 }
 
+/*changes button colors*/
+
 .likes {
   background-color: #486824;
   opacity: 0.75;
@@ -55,6 +59,8 @@ p {
   color: #4c3f54;
 }
 
+/*shows elements on hovering of a sibling element*/
+
 .showme{
 display: none;
 }
@@ -62,6 +68,8 @@ display: none;
 .showem:hover .showme{
 display : block;
 }
+
+/*makes link text white*/
 
 .whiteTxt {
   color: white;

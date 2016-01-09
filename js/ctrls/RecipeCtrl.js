@@ -44,6 +44,7 @@ app.controller('RecipeCtrl',
         var loading = [];
         var bestRids = [];
 
+        //assigning variables to angular scope
         this.reallyFinalRecipeArray = reallyFinalRecipeArray;
         this.finalRecipeArray = finalRecipeArray;
         this.firstItemArray = firstItemArray;
@@ -52,6 +53,9 @@ app.controller('RecipeCtrl',
         this.loading = loading;
         this.bestRids = bestRids;
 
+        //setting a weeks worth of start and end times, edit for loops for more dates
+        //for loop and getRecipes.while loop have to have same number of iterations!
+        // This is called on ctrl load.
         this.setDates = function(){
           for(var p = 1; p < 8; p++){
             var d = new Date();
@@ -68,6 +72,7 @@ app.controller('RecipeCtrl',
           }
         };
 
+        // gets list of cals from google.
         this.getCalList = function(){
         //setting empty variables for calendar ops
           var summaryArray = [];
@@ -95,10 +100,12 @@ app.controller('RecipeCtrl',
           });
         };
 
+        // removes an item from the shopping list
         this.removeItem = function(index){
           this.firstItemArray.splice(index, 1);
         }
 
+        //removes a recipe and calls an $http.get to get a replacement, resets item list. Requires CORS plugin!
         this.removeRecipeTryAgain = function(index){
           firstItemArray.splice(0, firstItemArray.length);
           finalRecipeArray.splice(index, 1);
@@ -118,21 +125,24 @@ app.controller('RecipeCtrl',
           })
         }
 
+        //authorizes google calendar access. window.initGapi has to be called from mainview "#/" to work
         this.authorizeGcal = function(){
           gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, this.getCalList);
           };
 
+        //sends user back to likes, doesn't destroy the selected arrays until they return to recipeCtrl
         this.backToLikes = function(){
           $location.path('/pref1');
         };
 
-
+        //main f2f ajax calls. HAVE TO HAVE CORS plugin to work. Makesure getRecipes.b and setDates.p stop iterating at the same number!!!
         this.getRecipes = function(){
           this.loading.push(1)
           var ridArray = [];
           var ridSearch = null;
           var b = 0;
           var iterator = 0;
+          //searches cuisenes, returns recipe lists.
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(
             'http://www.food2fork.com/api/search?key=6b91ff83a8b50ebe57a14f12073f1adb&q=' + likesArray[i].$id
@@ -144,16 +154,19 @@ app.controller('RecipeCtrl',
               )
             }).then(function() {
               if (iterator >= (likesArray.length * 30)) {
+                //^ make sure that if you do a new term, this search call returns 30 items! otherwise, shit breaks!
                 ridArray.forEach(function(recipe) {
                   if(recipe.social_rank >= 99){
                     bestRids.push(recipe.recipe_id);
                     console.log(bestRids)
                   }
                 });
+                //While loop. don't make this shit infinite.
                 while (b <= 6) {
                   y = Math.floor((Math.random() * bestRids.length));
                     ridSearch = bestRids[y];
                     console.log(bestRids[y])
+                    //main recipe get ajax call.
                     $http.get(
                       'http://food2fork.com/api/get?key=6b91ff83a8b50ebe57a14f12073f1adb&rId=' + ridSearch
                         ).success(function(objectA) {
@@ -168,6 +181,7 @@ app.controller('RecipeCtrl',
                           loading.pop();
                         }
                         )
+                  //deletes recipe from bestRids, increments b so theres not an infinite loop
                   bestRids.splice(y, 1);
                   b++
                   }
@@ -176,14 +190,15 @@ app.controller('RecipeCtrl',
             };
           };
 
-
+        //authorizes Google Calendar and fills Date arrays on page load.
         this.authorizeGcal();
         this.setDates();
 
-
+        // main function logic for assigning recipes to google cal.
         var megaFire = function(){
           this.finalItemArray = firstItemArray;
           console.log(this.finalItemArray);
+            // event asset.
             var dinner = {
               "kind": "calendar#event",
               "summary": finalRecipeArray[0].title,
@@ -217,6 +232,7 @@ app.controller('RecipeCtrl',
               'timeMin': endTime[0].toString()
             });
 
+            //checks if theres an event for this time. Doesn't really work right now?
             requestEvents.execute(function(respE){
               console.log(respE);
               if (respE.etag = '""0""'){
@@ -231,9 +247,11 @@ app.controller('RecipeCtrl',
                   console.log("Robots have already planned!");
               }
             })
+            //calls the delayMegaFire callback.
             delayMegaFire();
           };
 
+          //deletes date arrays as recipes are deleted out of finalRecipeArray and pushed to google calendar. callsback to megaFire.
       var delayMegaFire = function(){
             startTime.shift();
             endTime.shift();
@@ -241,10 +259,12 @@ app.controller('RecipeCtrl',
             megaFire();
           }
 
+          //calls megaFire to angular
       this.megaFire = function(){
           megaFire();
       }
 
+      // calls delayMegaFire to angular
       this.delayMegaFire = function(){
           delayMegaFire();
       }
