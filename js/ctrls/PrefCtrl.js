@@ -30,7 +30,7 @@ app.controller('PrefCtrl',
         var daysToSkip = [];
         var daysToPlan;
 
-
+        //linking to angular
         this.possibleLikes = possibleLikes;
         this.possibleAllergies = possibleAllergies;
         this.userAllergies = userAllergies;
@@ -51,6 +51,8 @@ app.controller('PrefCtrl',
 
         // this.zeroLikesAtFb();
 
+
+        //resets possibleLikes array
         this.resetLikes = function() {
           // this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
           // this.hateThese = [];
@@ -60,20 +62,24 @@ app.controller('PrefCtrl',
           };
         }
 
+        //deletes from possibleLikes array, pushes into hateThese
         this.removeLikes = function(index) {
           this.hateThese.push(possibleLikes[index]);
           this.possibleLikes.splice(index, 1);
         };
 
+        //reverses above, pushes from hateThese into possibleLikes
         this.undoHate = function(index) {
           this.possibleLikes.push(hateThese[index]);
           this.hateThese.splice(index, 1)
         }
 
-        this.pushAllergies = function(index) {
+        //allergy code - not supportted in v1.0
+        /*this.pushAllergies = function(index) {
           this.userAllergies.push(possibleAllergies.slice(index, (index+1)).toString())
-        };
+        };*/
 
+        //adds likes to user in firebase, also sets hates to null value
         this.addLikesToUser = function(){
           console.log(user);
           for (var i = possibleLikes.length - 1; i >= 0; i--) {
@@ -85,18 +91,22 @@ app.controller('PrefCtrl',
           $location.path('/fire');
         };
 
-        this.addAllergiesToUser = function(){
+        //adds allergies to user, not suppported in v1.0
+        /*this.addAllergiesToUser = function(){
           for (var i = userAllergies.length - 1; i >= 0; i--) {
             ref.child("allergies").child(userAllergies[i]).set(user);
           };
           $location.path('/fire');
-        }
+        }*/
 
-        this.pushDays = function(index){
+        //code for setting mealTimes, not supported in v1.0
+
+        /*this.pushDays = function(index){
           this.daysToSkip.push(daysArray.slice(index, (index+1)).toString())
-        }
+        }*/
 
-        this.setToUser = function(){
+        //setting all the custom mealTimes - not supported in v1.0
+        /*this.setToUser = function(){
           this.mealTimeEnd.setHours((mealTime.getHours() + 1));
           this.mealTimeEnd.setMinutes((mealTime.getMinutes()));
           this.mealTimeEnd.setSeconds(00);
@@ -112,7 +122,7 @@ app.controller('PrefCtrl',
           ref.child("daysToSkip").child(this.daysToSkip).set(user);
           ref.child("daysToPlan").child(this.daysToPlan).set(user);
           $location.path('/shoppingList');
-      }
+      }*/
     }
   ]
 )
