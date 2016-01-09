@@ -1,18 +1,26 @@
 <div ng-controller="RecipeCtrl as recipeCtrl">
   <div class = "container">
-    <h2 class ="center-align">click the buttons</h2>
+    <h1 class ="center-align">
+      <span class = "btnText">
+        <span ng-hide = "a">click the button</span>
+        <span ng-show = "recipeCtrl.loading.length > 0">watch the spinny thing</span>
+        <span ng-show = "recipeCtrl.finalRecipeArray.length > 0">look tasty?</span>
+        <span ng-show = "recipeCtrl.endTime.length < 2">Good. Now Leave.</span>
+      </span>
+    </h1>
+
 
     <!--fun with buttons -->
 
     <p>
-      <button class = 'waves-effect waves-light btn' ng-hide = "recipeCtrl.loading.length > 0">
+      <button class = 'waves-effect waves-light btn likes' ng-hide = "recipeCtrl.loading.length > 0">
         <span ng-click="recipeCtrl.getRecipes(); a = !a;" ng-show = "!a">What am I eating?</span>
         <span ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</span>
-        <a href = "http://calendar.google.com" target="_blank" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> |</span>go to my calendar</a>
+        <a href = "http://calendar.google.com" target="_blank" ng-show = "recipeCtrl.endTime.length < 2"><span class = "fa fa-share fa-2x"> | </span>go to my calendar</a>
       </button>
 
     <!-- <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.megaFire();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-calendar-plus-o"> </span> send these to calendar</button> -->
-      <button class = "waves-effect waves-light btn" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
+      <button class = "waves-effect waves-light btn hates" ng-click="recipeCtrl.backToLikes();" ng-show="recipeCtrl.finalRecipeArray.length > 0"><span class="fa fa-arrow-left fa-2x"></span> edit likes</button><br/>
 
       <span class = "fa fa-cutlery fa-5x fa-spin" ng-show="recipeCtrl.loading.length > 0"></span>
     </p>
@@ -22,7 +30,7 @@
 
     <div class="row">
       <ul class="collection col s7 push-s5" ng-show = "recipeCtrl.reallyFinalRecipeArray.length > 0">
-        <li class="collection-item" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}}</li>
+        <li class="collection-item showem" ng-repeat="item in recipeCtrl.firstItemArray | unique track by $index">{{item}} <i class="material-icons right align showme" ng-click="recipeCtrl.removeItem($index)">close</i></li>
       </ul>
       <div class="col s5 pull-s7">
         <div class="card small" ng-repeat = "recipe in recipeCtrl.reallyFinalRecipeArray | unique track by $index">

@@ -38,6 +38,7 @@ app.controller('RecipeCtrl',
         var startTime = [];
         var endTime = [];
         var loading = [];
+        var bestRids = [];
 
         this.reallyFinalRecipeArray = reallyFinalRecipeArray;
         this.finalRecipeArray = finalRecipeArray;
@@ -45,6 +46,7 @@ app.controller('RecipeCtrl',
         this.finalItemArray = finalItemArray;
         this.endTime = endTime;
         this.loading = loading;
+        this.bestRids = bestRids;
 
         this.setDates = function(){
           for(var p = 1; p < 8; p++){
@@ -94,7 +96,7 @@ app.controller('RecipeCtrl',
         }
 
         this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar', 'immediate': 'true'}, this.getCalList);
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, this.getCalList);
           };
 
         this.backToLikes = function(){
@@ -107,8 +109,7 @@ app.controller('RecipeCtrl',
           var ridSearch = null;
           var b = 0;
           var iterator = 0;
-          var bestRids = [];
-          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|may\s|need\s|need|additional\s|additional|depending\s|depending|texture\s|texture|ew\s|we|use\s|use|consistancy\s|consistancy|time\s|time|you\s|you|add\s|add|at\s|for\s|for|the\s|the|room\s|room|temperature\s|temperature|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|deseeded\s|deseeded|seeded\s|seeded|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
+          var cookingTerms = /(\(|\)|\d+[\/.]\d+?\s|[0-9]|may\s|need\s|need|additional\s|additional|depending\s|depending|texture\s|texture|we\s|use\s|use|consistancy\s|consistancy|time\s|time|you\s|you|add\s|add|at\s|for\s|for|the\s|the|room\s|temperature\s|temperature|tablespoons\s|tablespoon\s|tbsp\s|tsp\s|teaspoons\s|teaspoon\s|cups\s|cup\s|chopped\s|chopped|sliced\s|sliced|pounds\s|pounds|pound\s|pound|pinch\s|diced\s|diced|thinly\s|thinly|thin\s|thin|fluid\s|fluid|rinsed\s|rinsed|jars\s|jar\s|ounces\s|ounce\s|\d\ounces\s|\d\ounce\s|ounces\s|ounces|whole\s|whole|minced\s|minced|drained\s|drained|thawed\s|thawed|half\s|half|inch\s|inch|heaped\s|heaped|lbs\s|lb\s|toasted\s|toasted|ground\s|ground|finely\s|quartered\s|quartered|and\s|of\s|lightly\s|packed\s|packed|roughly\s|peeled\s|about\s|dusting\s|deseeded\s|deseeded|seeded\s|seeded|divided\s|\s\(up\sto\syou\)|for\schopping\s|large\smezzaluna\s|Special\sequipment:\s|\d{3}g\s|\d{2}g\s|\dg\s|grams\s|gram\s|milliliters\s|milliliter\s|millilitres\s|millilitre\s|ml\s|\d\s|,)/gi;
           var subst = '';
           for (var i = likesArray.length - 1; i >= 0; i--) {
             $http.get(

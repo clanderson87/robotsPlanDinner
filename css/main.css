@@ -1,14 +1,36 @@
 h1 {
+  /*background-color: #4c3f54;*/
+  /*color: #f2c057;*/
+  color: #4c3f54;
   text-align: center;
   padding: 0;
+  font-weight: 200;
+  letter-spacing: -3px;
+  word-spacing: 20px;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+h2{
+  /*background-color: #4c3f54;
+  color: #f2c057;*/
+  color: #4c3f54;
+  text-align: center;
+  padding: 0;
+  font-weight: 200;
+  letter-spacing: -3px;
+  word-spacing: 20px;
+  text-transform: uppercase;
+  margin-top: 0;
 }
 
 body {
-  background-color: #cfd8dc;
+  background-color: #f2c057;
 }
 
 p {
   text-align: center;
+  color: #4c3f54;
 }
 
 a {
@@ -16,5 +38,30 @@ a {
 }
 
 .likes {
-  color: ;
+  background-color: #486824;
+  opacity: 0.75;
+}
+
+.likes:hover {
+  background-color: #4c3f54;
+}
+
+.hates {
+  background-color: #d13525;
+  opacity: 0.75;
+}
+
+.hates:hover {
+ background-color: #333333;
+}
+
+.btnText {
+  color: #4c3f54;
+}
+
+.showme{
+display: none;
+}
+.showem:hover .showme{
+display : block;
 }

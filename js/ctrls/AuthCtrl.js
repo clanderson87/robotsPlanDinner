@@ -8,7 +8,7 @@ var currentUser = null;
   var ref = new Firebase("https://rpd.firebaseio.com");
   var usersRef = ref.child('users');
 
-//c&p from firebase, wrapped in function
+// c&p from firebase, wrapped in function
   this.login = function(){
       ref.authWithOAuthPopup("google", function(error, authData) {
         if (error) {
