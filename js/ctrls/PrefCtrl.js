@@ -7,6 +7,10 @@ app.controller('PrefCtrl',
       $firebaseObject,
       loginFctry) {
 
+        //alising this
+        var vm = this;
+
+
         //firebase shit
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
@@ -31,17 +35,17 @@ app.controller('PrefCtrl',
         var daysToPlan;
 
         //linking to angular
-        this.possibleLikes = possibleLikes;
-        this.possibleAllergies = possibleAllergies;
-        this.userAllergies = userAllergies;
-        this.hateThese = hateThese;
-        this.mealTime = mealTime;
-        this.mealTimeEnd = mealTimeEnd;
-        this.daysArray = daysArray;
-        this.daysToSkip = daysToSkip;
-        this.daysToPlan =  daysToPlan;
+        vm.possibleLikes = possibleLikes;
+        vm.possibleAllergies = possibleAllergies;
+        vm.userAllergies = userAllergies;
+        vm.hateThese = hateThese;
+        vm.mealTime = mealTime;
+        vm.mealTimeEnd = mealTimeEnd;
+        vm.daysArray = daysArray;
+        vm.daysToSkip = daysToSkip;
+        vm.daysToPlan =  daysToPlan;
 
-        // this.zeroLikesAtFb = function(){
+        // vm.zeroLikesAtFb = function(){
         //   var zeroOne = ref.child("likes").orderByValue().equalTo(user);
         //   var zeroTwo = zeroOne.ref();
 
@@ -49,38 +53,38 @@ app.controller('PrefCtrl',
         //   console.log("yup");
         // }
 
-        // this.zeroLikesAtFb();
+        // vm.zeroLikesAtFb();
 
 
         //resets possibleLikes array
-        this.resetLikes = function() {
-          // this.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
-          // this.hateThese = [];
+        vm.resetLikes = function() {
+          // vm.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
+          // vm.hateThese = [];
           for (var i = hateThese.length - 1; i >= 0; i--) {
-            this.possibleLikes.push(hateThese[i])
-            this.hateThese.splice([i], 1);
+            vm.possibleLikes.push(hateThese[i])
+            vm.hateThese.splice([i], 1);
           };
         }
 
         //deletes from possibleLikes array, pushes into hateThese
-        this.removeLikes = function(index) {
-          this.hateThese.push(possibleLikes[index]);
-          this.possibleLikes.splice(index, 1);
+        vm.removeLikes = function(index) {
+          vm.hateThese.push(possibleLikes[index]);
+          vm.possibleLikes.splice(index, 1);
         };
 
         //reverses above, pushes from hateThese into possibleLikes
-        this.undoHate = function(index) {
-          this.possibleLikes.push(hateThese[index]);
-          this.hateThese.splice(index, 1)
+        vm.undoHate = function(index) {
+          vm.possibleLikes.push(hateThese[index]);
+          vm.hateThese.splice(index, 1)
         }
 
         //allergy code - not supportted in v1.0
-        /*this.pushAllergies = function(index) {
-          this.userAllergies.push(possibleAllergies.slice(index, (index+1)).toString())
+        /*vm.pushAllergies = function(index) {
+          vm.userAllergies.push(possibleAllergies.slice(index, (index+1)).toString())
         };*/
 
         //adds likes to user in firebase, also sets hates to null value
-        this.addLikesToUser = function(){
+        vm.addLikesToUser = function(){
           console.log(user);
           for (var i = possibleLikes.length - 1; i >= 0; i--) {
             ref.child("likes").child(possibleLikes[i]).set(user);
@@ -92,7 +96,7 @@ app.controller('PrefCtrl',
         };
 
         //adds allergies to user, not suppported in v1.0
-        /*this.addAllergiesToUser = function(){
+        /*vm.addAllergiesToUser = function(){
           for (var i = userAllergies.length - 1; i >= 0; i--) {
             ref.child("allergies").child(userAllergies[i]).set(user);
           };
@@ -101,26 +105,26 @@ app.controller('PrefCtrl',
 
         //code for setting mealTimes, not supported in v1.0
 
-        /*this.pushDays = function(index){
-          this.daysToSkip.push(daysArray.slice(index, (index+1)).toString())
+        /*vm.pushDays = function(index){
+          vm.daysToSkip.push(daysArray.slice(index, (index+1)).toString())
         }*/
 
         //setting all the custom mealTimes - not supported in v1.0
-        /*this.setToUser = function(){
-          this.mealTimeEnd.setHours((mealTime.getHours() + 1));
-          this.mealTimeEnd.setMinutes((mealTime.getMinutes()));
-          this.mealTimeEnd.setSeconds(00);
-          // console.log(this.mealTimeEnd)
-          console.log(this.mealTime)
-          console.log(this.mealTimeEnd);
-          this.mealTimeEnd = this.mealTimeEnd.valueOf();
-          this.mealTime = this.mealTimeEnd.valueOf();
-          this.daysToPlan -= (this.daysToSkip.length);
-          this.daysToSkip = this.daysToSkip.toString();
-          ref.child("mealTime").child(this.mealTime).set(user);
-          ref.child("mealTimeEnd").child(this.mealTimeEnd).set(user);
-          ref.child("daysToSkip").child(this.daysToSkip).set(user);
-          ref.child("daysToPlan").child(this.daysToPlan).set(user);
+        /*vm.setToUser = function(){
+          vm.mealTimeEnd.setHours((mealTime.getHours() + 1));
+          vm.mealTimeEnd.setMinutes((mealTime.getMinutes()));
+          vm.mealTimeEnd.setSeconds(00);
+          // console.log(vm.mealTimeEnd)
+          console.log(vm.mealTime)
+          console.log(vm.mealTimeEnd);
+          vm.mealTimeEnd = vm.mealTimeEnd.valueOf();
+          vm.mealTime = vm.mealTimeEnd.valueOf();
+          vm.daysToPlan -= (vm.daysToSkip.length);
+          vm.daysToSkip = vm.daysToSkip.toString();
+          ref.child("mealTime").child(vm.mealTime).set(user);
+          ref.child("mealTimeEnd").child(vm.mealTimeEnd).set(user);
+          ref.child("daysToSkip").child(vm.daysToSkip).set(user);
+          ref.child("daysToPlan").child(vm.daysToPlan).set(user);
           $location.path('/shoppingList');
       }*/
     }

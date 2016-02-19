@@ -19,6 +19,9 @@ app.controller('RecipeCtrl',
       gapiService,
       $location) {
 
+        //aliasing this
+        var vm = this;
+
         //Firebase code
         var ref = new Firebase("https://rpd.firebaseio.com");
         var auth = ref.getAuth();
@@ -45,18 +48,18 @@ app.controller('RecipeCtrl',
         var bestRids = [];
 
         //assigning variables to angular scope
-        this.reallyFinalRecipeArray = reallyFinalRecipeArray;
-        this.finalRecipeArray = finalRecipeArray;
-        this.firstItemArray = firstItemArray;
-        this.finalItemArray = finalItemArray;
-        this.endTime = endTime;
-        this.loading = loading;
-        this.bestRids = bestRids;
+        vm.reallyFinalRecipeArray = reallyFinalRecipeArray;
+        vm.finalRecipeArray = finalRecipeArray;
+        vm.firstItemArray = firstItemArray;
+        vm.finalItemArray = finalItemArray;
+        vm.endTime = endTime;
+        vm.loading = loading;
+        vm.bestRids = bestRids;
 
         //setting a weeks worth of start and end times, edit for loops for more dates
         //for loop and getRecipes.while loop have to have same number of iterations!
-        // This is called on ctrl load.
-        this.setDates = function(){
+        // IIFE called on ctrl load.
+        vm.setDates = function(){
           for(var p = 1; p < 8; p++){
             var d = new Date();
             var rDate = ((d.getDate()) + p)
@@ -70,10 +73,10 @@ app.controller('RecipeCtrl',
             console.log(d)
             endTime.push(d.toISOString());
           }
-        };
+        }();
 
         // gets list of cals from google.
-        this.getCalList = function(){
+        vm.getCalList = function(){
         //setting empty variables for calendar ops
           var summaryArray = [];
           var getCalId = function(){
@@ -101,12 +104,12 @@ app.controller('RecipeCtrl',
         };
 
         // removes an item from the shopping list
-        this.removeItem = function(index){
-          this.firstItemArray.splice(index, 1);
+        vm.removeItem = function(index){
+          vm.firstItemArray.splice(index, 1);
         }
 
         //removes a recipe and calls an $http.get to get a replacement, resets item list. Requires CORS plugin!
-        this.removeRecipeTryAgain = function(index){
+        vm.removeRecipeTryAgain = function(index){
           firstItemArray.splice(0, firstItemArray.length);
           finalRecipeArray.splice(index, 1);
           reallyFinalRecipeArray.splice(index, 1);
@@ -125,19 +128,19 @@ app.controller('RecipeCtrl',
           })
         }
 
-        //authorizes google calendar access. window.initGapi has to be called from mainview "#/" to work
-        this.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, this.getCalList);
-          };
+        //authorizes google calendar access. window.initGapi has to be called from mainview "#/" to work. IIFE called on controller load.
+        vm.authorizeGcal = function(){
+          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, vm.getCalList);
+          }();
 
         //sends user back to likes, doesn't destroy the selected arrays until they return to recipeCtrl
-        this.backToLikes = function(){
+        vm.backToLikes = function(){
           $location.path('/pref1');
         };
 
         //main f2f ajax calls. HAVE TO HAVE CORS plugin to work. Makesure getRecipes.b and setDates.p stop iterating at the same number!!!
-        this.getRecipes = function(){
-          this.loading.push(1)
+        vm.getRecipes = function(){
+          vm.loading.push(1)
           var ridArray = [];
           var ridSearch = null;
           var b = 0;
@@ -154,14 +157,14 @@ app.controller('RecipeCtrl',
               )
             }).then(function() {
               if (iterator >= (likesArray.length * 30)) {
-                //^ make sure that if you do a new term, this search call returns 30 items! otherwise, shit breaks!
+                //^ make sure that if you do a new term, vm search call returns 30 items! otherwise, shit breaks!
                 ridArray.forEach(function(recipe) {
                   if(recipe.social_rank >= 99){
                     bestRids.push(recipe.recipe_id);
                     console.log(bestRids)
                   }
                 });
-                //While loop. don't make this shit infinite.
+                //While loop. don't make vm shit infinite.
                 while (b <= 6) {
                   y = Math.floor((Math.random() * bestRids.length));
                     ridSearch = bestRids[y];
@@ -190,14 +193,10 @@ app.controller('RecipeCtrl',
             };
           };
 
-        //authorizes Google Calendar and fills Date arrays on page load.
-        this.authorizeGcal();
-        this.setDates();
-
         // main function logic for assigning recipes to google cal.
         var megaFire = function(){
-          this.finalItemArray = firstItemArray;
-          console.log(this.finalItemArray);
+          vm.finalItemArray = firstItemArray;
+          console.log(vm.finalItemArray);
             // event asset.
             var dinner = {
               "kind": "calendar#event",
@@ -232,7 +231,7 @@ app.controller('RecipeCtrl',
               'timeMin': endTime[0].toString()
             });
 
-            //checks if theres an event for this time. Doesn't really work right now?
+            //checks if theres an event for vm time. Doesn't really work right now?
             requestEvents.execute(function(respE){
               console.log(respE);
               if (respE.etag = '""0""'){
@@ -260,12 +259,12 @@ app.controller('RecipeCtrl',
           }
 
           //calls megaFire to angular
-      this.megaFire = function(){
+      vm.megaFire = function(){
           megaFire();
       }
 
       // calls delayMegaFire to angular
-      this.delayMegaFire = function(){
+      vm.delayMegaFire = function(){
           delayMegaFire();
       }
 
