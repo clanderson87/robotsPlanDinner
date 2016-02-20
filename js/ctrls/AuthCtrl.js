@@ -1,5 +1,5 @@
-app.controller('AuthCtrl', ["$firebaseAuth", "$location", "$firebaseObject", "LoginFctry",
-  function($firebaseAuth, $location, $firebaseObject, loginFctry) {
+app.controller('AuthCtrl', ["$location",
+  function($location) {
 
     //aliasing this
     var vm = this;
