@@ -1,5 +1,7 @@
 var app = angular.module('RpdApp', ['firebase', 'angular.filter', 'ngRoute', 'ui.bootstrap'])
 
+//BELOW IS CRITICAL FOR ANGuLAR/ GOOGLE INTEGRATION
+
 var init = function() {
   window.initGapi();
 }
@@ -28,6 +30,8 @@ app.service('gapiService', function($location) {
   gapi.client.load('calendar', 'v3', this.callback)
   }
 });
+
+//CLOSE CRITICAL GAPI INTEGRATION
 
 //Setting Up routes
 app.config(['$routeProvider', function($routeProvider){
