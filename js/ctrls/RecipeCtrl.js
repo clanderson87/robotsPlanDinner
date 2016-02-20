@@ -1,22 +1,12 @@
 app.controller('RecipeCtrl',
   [
   '$firebaseArray',
-  '$scope',
-  '$firebaseObject',
   '$http',
-  '$window',
-  'LoginFctry',
-  'gapiService',
   '$location',
 
     function(
       $firebaseArray,
-      $scope,
-      $firebaseObject,
       $http,
-      $window,
-      loginFctry,
-      gapiService,
       $location) {
 
         //aliasing this
