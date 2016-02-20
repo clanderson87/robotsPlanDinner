@@ -59,7 +59,9 @@ app.controller('RecipeCtrl',
         //setting a weeks worth of start and end times, edit for loops for more dates
         //for loop and getRecipes.while loop have to have same number of iterations!
         // IIFE called on ctrl load.
-        vm.setDates = function(){
+
+        //make this user settable, perhaps in prefCtrl?
+        var setDates = function(){
           for(var p = 1; p < 8; p++){
             var d = new Date();
             var rDate = ((d.getDate()) + p)
@@ -76,7 +78,7 @@ app.controller('RecipeCtrl',
         }();
 
         // gets list of cals from google.
-        vm.getCalList = function(){
+        var getCalList = function(){
         //setting empty variables for calendar ops
           var summaryArray = [];
           var getCalId = function(){
@@ -139,6 +141,8 @@ app.controller('RecipeCtrl',
         };
 
         //main f2f ajax calls. HAVE TO HAVE CORS plugin to work. Makesure getRecipes.b and setDates.p stop iterating at the same number!!!
+
+        //refactor/ make a pro condition to use the yummly API.
         vm.getRecipes = function(){
           vm.loading.push(1)
           var ridArray = [];
@@ -191,10 +195,10 @@ app.controller('RecipeCtrl',
                   }
                 });
             };
-          };
+          }; // end getRecipes
 
         // main function logic for assigning recipes to google cal.
-        var megaFire = function(){
+        vm.megaFire = function(){
           vm.finalItemArray = firstItemArray;
           console.log(vm.finalItemArray);
             // event asset.
@@ -248,25 +252,16 @@ app.controller('RecipeCtrl',
             })
             //calls the delayMegaFire callback.
             delayMegaFire();
-          };
+          }; // end megaFire
 
           //deletes date arrays as recipes are deleted out of finalRecipeArray and pushed to google calendar. callsback to megaFire.
-      var delayMegaFire = function(){
+      vm.delayMegaFire = function(){
             startTime.shift();
             endTime.shift();
             finalRecipeArray.shift();
             megaFire();
-          }
+          } // end delayMegaFire
 
-          //calls megaFire to angular
-      vm.megaFire = function(){
-          megaFire();
-      }
-
-      // calls delayMegaFire to angular
-      vm.delayMegaFire = function(){
-          delayMegaFire();
-      }
 
     }
   ]
