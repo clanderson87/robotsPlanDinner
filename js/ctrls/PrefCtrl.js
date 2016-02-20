@@ -1,11 +1,7 @@
 app.controller('PrefCtrl',
   ['$location',
-  '$firebaseObject',
-  'LoginFctry',
 
-    function($location,
-      $firebaseObject,
-      loginFctry) {
+    function($location) {
 
         //alising this
         var vm = this;
