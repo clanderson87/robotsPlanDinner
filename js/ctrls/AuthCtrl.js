@@ -1,5 +1,5 @@
-app.controller('AuthCtrl', ["$location",
-  function($location) {
+app.controller('AuthCtrl', ["$location", "refFctry",
+  function($location, ref) {
 
     //aliasing this
     var vm = this;
@@ -7,13 +7,13 @@ app.controller('AuthCtrl', ["$location",
     //Add empty currentUser
     var currentUser = null;
 
-    //init the firebase
-    var ref = new Firebase("https://rpd.firebaseio.com");
-    var usersRef = ref.child('users');
+    //init the firebase with refFctry
+    var loginRef = ref.ref
+    var usersRef = loginRef.child('users');
 
     // c&p from firebase, wrapped in function
     vm.login = function(){
-        ref.authWithOAuthPopup("google", function(error, authData) {
+        loginRef.authWithOAuthPopup("google", function(error, authData) {
           if (error) {
             console.log("Login Failed!", error);
           } else {
