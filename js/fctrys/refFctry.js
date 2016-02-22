@@ -6,7 +6,7 @@ app.factory('refFctry',
       $firebaseArray,
       $firebaseObject){
 
-        var ref = new Firebase("https://survey-creator.firebaseio.com");
+        var ref = new Firebase("https://rpd.firebaseio.com");
         var refArray = $firebaseArray(ref);
         var refObj = $firebaseObject(ref);
 
