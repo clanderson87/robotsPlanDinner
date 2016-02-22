@@ -1,16 +1,25 @@
-app.controller('PrefCtrl',
-  ['$location',
+app.controller('PfirebaseRefCtrl',
+  ["$location",
+  "refFctry",
+  "loginFctry"
 
-    function($location) {
+    function($location,
+      ref,
+      auth) {
 
         //alising this
         var vm = this;
 
 
         //firebase shit
-        var ref = new Firebase("https://rpd.firebaseio.com");
-        var auth = ref.getAuth();
+        var firebaseRef = ref.ref
+        var authData = auth.$getAuth();
         var user = auth.uid;
+        if (authData) {
+          console.log("Logged in as:", authData.uid);
+        } else {
+          console.log("Logged out");
+        };
 
         // possible arrays
         var possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
@@ -42,8 +51,8 @@ app.controller('PrefCtrl',
         vm.daysToPlan =  daysToPlan;
 
         // vm.zeroLikesAtFb = function(){
-        //   var zeroOne = ref.child("likes").orderByValue().equalTo(user);
-        //   var zeroTwo = zeroOne.ref();
+        //   var zeroOne = firebaseRef.child("likes").orderByValue().equalTo(user);
+        //   var zeroTwo = zeroOne.firebaseRef();
 
         //   // zeroTwo.remove();
         //   console.log("yup");
@@ -83,10 +92,10 @@ app.controller('PrefCtrl',
         vm.addLikesToUser = function(){
           console.log(user);
           for (var i = possibleLikes.length - 1; i >= 0; i--) {
-            ref.child("likes").child(possibleLikes[i]).set(user);
+            firebaseRef.child("likes").child(possibleLikes[i]).set(user);
           };
           for (var j = hateThese.length -1 ; j >=0; j--){
-            ref.child("likes").child(hateThese[j]).set(null);
+            firebaseRef.child("likes").child(hateThese[j]).set(null);
           };
           $location.path('/fire');
         };
@@ -94,7 +103,7 @@ app.controller('PrefCtrl',
         //adds allergies to user, not suppported in v1.0
         /*vm.addAllergiesToUser = function(){
           for (var i = userAllergies.length - 1; i >= 0; i--) {
-            ref.child("allergies").child(userAllergies[i]).set(user);
+            firebaseRef.child("allergies").child(userAllergies[i]).set(user);
           };
           $location.path('/fire');
         }*/
@@ -117,10 +126,10 @@ app.controller('PrefCtrl',
           vm.mealTime = vm.mealTimeEnd.valueOf();
           vm.daysToPlan -= (vm.daysToSkip.length);
           vm.daysToSkip = vm.daysToSkip.toString();
-          ref.child("mealTime").child(vm.mealTime).set(user);
-          ref.child("mealTimeEnd").child(vm.mealTimeEnd).set(user);
-          ref.child("daysToSkip").child(vm.daysToSkip).set(user);
-          ref.child("daysToPlan").child(vm.daysToPlan).set(user);
+          firebaseRef.child("mealTime").child(vm.mealTime).set(user);
+          firebaseRef.child("mealTimeEnd").child(vm.mealTimeEnd).set(user);
+          firebaseRef.child("daysToSkip").child(vm.daysToSkip).set(user);
+          firebaseRef.child("daysToPlan").child(vm.daysToPlan).set(user);
           $location.path('/shoppingList');
       }*/
     }
