@@ -15,6 +15,7 @@ app.controller('PfirebaseRefCtrl',
         var firebaseRef = ref.ref
         var authData = auth.$getAuth();
         var user = auth.uid;
+
         if (authData) {
           console.log("Logged in as:", authData.uid);
         } else {

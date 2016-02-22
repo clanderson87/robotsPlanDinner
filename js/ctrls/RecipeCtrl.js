@@ -3,23 +3,34 @@ app.controller('RecipeCtrl',
   '$firebaseArray',
   '$http',
   '$location',
+  'refFctry',
+  'loginFctry',
 
     function(
       $firebaseArray,
       $http,
-      $location) {
+      $location,
+      ref,
+      suth) {
 
         //aliasing this
         var vm = this;
 
         //Firebase code
-        var ref = new Firebase("https://rpd.firebaseio.com");
-        var auth = ref.getAuth();
+        var firebaseRef = ref.ref
+        var authData = auth.$getAuth();
         var user = auth.uid;
-        var daysToPlan = ref.child("daysToPlan").orderByValue().equalTo(user);
-        var allergyRef = ref.child("allergies").orderByValue().equalTo(user);
+
+        if (authData) {
+          console.log("Logged in as:", authData.uid);
+        } else {
+          console.log("Logged out");
+        };
+
+        var daysToPlan = firebaseRef.child("daysToPlan").orderByValue().equalTo(user);
+        var allergyRef = firebaseRef.child("allergies").orderByValue().equalTo(user);
         var allergyArray = $firebaseArray(allergyRef);
-        var likesRef = ref.child("likes").orderByValue().equalTo(user);
+        var likesRef = firebaseRef.child("likes").orderByValue().equalTo(user);
         var likesArray = $firebaseArray(likesRef);
 
         //cooking terms and substitutions
