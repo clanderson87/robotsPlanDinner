@@ -1,7 +1,7 @@
 app.controller('PfirebaseRefCtrl',
   ["$location",
   "refFctry",
-  "loginFctry"
+  "loginFctry",
 
     function($location,
       ref,
