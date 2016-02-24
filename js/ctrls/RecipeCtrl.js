@@ -185,7 +185,6 @@ app.controller('RecipeCtrl',
                             firstItemArray.push(filteredItem);
                           })
                           console.log(finalRecipeArray);
-                          console.log(reallyFinalRecipeArray);
                           loading.pop();
                         }
                         )
@@ -199,7 +198,8 @@ app.controller('RecipeCtrl',
           }; // end getRecipes
 
         // main function logic for assigning recipes to google cal.
-        vm.megaFire = function(){
+        var megaFire = function(){
+          console.log(finalRecipeArray)
           vm.finalItemArray = firstItemArray;
             // event asset.
             var dinner = {
@@ -255,12 +255,22 @@ app.controller('RecipeCtrl',
           }; // end megaFire
 
           //deletes date arrays as recipes are deleted out of finalRecipeArray and pushed to google calendar. callsback to megaFire.
-      vm.delayMegaFire = function(){
+      var delayMegaFire = function(){
             startTime.shift();
             endTime.shift();
             finalRecipeArray.shift();
             vm.megaFire();
           }; // end delayMegaFire
+
+         //calls megaFire to angular
+      vm.megaFire = function(){
+          megaFire();
+      }
+
+      // calls delayMegaFire to angular
+      vm.delayMegaFire = function(){
+          delayMegaFire();
+      }
     }
   ]
 )
