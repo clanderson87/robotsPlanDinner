@@ -1,4 +1,4 @@
-app.controller('PfirebaseRefCtrl',
+app.controller('PrefCtrl',
   ["$location",
   "refFctry",
   "loginFctry",
@@ -51,21 +51,9 @@ app.controller('PfirebaseRefCtrl',
         vm.daysToSkip = daysToSkip;
         vm.daysToPlan =  daysToPlan;
 
-        // vm.zeroLikesAtFb = function(){
-        //   var zeroOne = firebaseRef.child("likes").orderByValue().equalTo(user);
-        //   var zeroTwo = zeroOne.firebaseRef();
-
-        //   // zeroTwo.remove();
-        //   console.log("yup");
-        // }
-
-        // vm.zeroLikesAtFb();
-
 
         //resets possibleLikes array
         vm.resetLikes = function() {
-          // vm.possibleLikes = ["Italian", "American", "Mexican", "German", "Chinese", "French", "English", "Irish", "Southwestern", "New England", "Southern", "Korean", "BBQ"];
-          // vm.hateThese = [];
           for (var i = hateThese.length - 1; i >= 0; i--) {
             vm.possibleLikes.push(hateThese[i])
             vm.hateThese.splice([i], 1);

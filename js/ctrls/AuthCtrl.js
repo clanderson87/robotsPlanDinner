@@ -20,7 +20,7 @@ app.controller('AuthCtrl', ["$location", "refFctry",
             console.log("Authenticated successfully with payload:", authData);
             userRefObj = authData;
             userRefObj.username = authData.google.displayName;
-            ref.child("users").child(authData.uid).set(userRefObj);
+            loginRef.child("users").child(authData.uid).set(userRefObj);
           };
         }, {
           scope: 'https://www.googleapis.com/auth/calendar',
