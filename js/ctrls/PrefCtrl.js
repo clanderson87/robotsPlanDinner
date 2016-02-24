@@ -14,7 +14,7 @@ app.controller('PrefCtrl',
         //firebase shit
         var firebaseRef = ref.ref
         var authData = auth.$getAuth();
-        var user = auth.uid;
+        var user = authData.uid;
 
         if (authData) {
           console.log("Logged in as:", authData.uid);

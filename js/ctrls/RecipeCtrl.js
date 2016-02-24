@@ -11,7 +11,7 @@ app.controller('RecipeCtrl',
       $http,
       $location,
       ref,
-      suth) {
+      auth) {
 
         //aliasing this
         var vm = this;
@@ -19,7 +19,7 @@ app.controller('RecipeCtrl',
         //Firebase code
         var firebaseRef = ref.ref
         var authData = auth.$getAuth();
-        var user = auth.uid;
+        var user = authData.uid;
 
         if (authData) {
           console.log("Logged in as:", authData.uid);
@@ -78,7 +78,7 @@ app.controller('RecipeCtrl',
           }
         }();
 
-        // gets list of cals from google.
+        // gets list of cals from google, IIFE fires on ctrl load
         var getCalList = function(){
         //setting empty variables for calendar ops
           var summaryArray = [];
@@ -201,7 +201,6 @@ app.controller('RecipeCtrl',
         // main function logic for assigning recipes to google cal.
         vm.megaFire = function(){
           vm.finalItemArray = firstItemArray;
-          console.log(vm.finalItemArray);
             // event asset.
             var dinner = {
               "kind": "calendar#event",
@@ -252,7 +251,7 @@ app.controller('RecipeCtrl',
               }
             })
             //calls the delayMegaFire callback.
-            delayMegaFire();
+            vm.delayMegaFire();
           }; // end megaFire
 
           //deletes date arrays as recipes are deleted out of finalRecipeArray and pushed to google calendar. callsback to megaFire.
@@ -260,10 +259,8 @@ app.controller('RecipeCtrl',
             startTime.shift();
             endTime.shift();
             finalRecipeArray.shift();
-            megaFire();
-          } // end delayMegaFire
-
-
+            vm.megaFire();
+          }; // end delayMegaFire
     }
   ]
 )
