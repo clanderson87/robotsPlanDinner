@@ -11,7 +11,7 @@ app.controller('RecipeCtrl',
       $http,
       $location,
       ref,
-      suth) {
+      auth) {
 
         //aliasing this
         var vm = this;
@@ -19,7 +19,7 @@ app.controller('RecipeCtrl',
         //Firebase code
         var firebaseRef = ref.ref
         var authData = auth.$getAuth();
-        var user = auth.uid;
+        var user = authData.uid;
 
         if (authData) {
           console.log("Logged in as:", authData.uid);
@@ -78,7 +78,7 @@ app.controller('RecipeCtrl',
           }
         }();
 
-        // gets list of cals from google.
+        // gets list of cals from google, IIFE fires on ctrl load
         var getCalList = function(){
         //setting empty variables for calendar ops
           var summaryArray = [];
@@ -106,6 +106,15 @@ app.controller('RecipeCtrl',
           });
         };
 
+        //authorizes google calendar access. window.initGapi has to be called from mainview "#/" to work. IIFE called on controller load.
+        vm.authorizeGcal = function(){
+          gapi.auth.authorize({
+            'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com',
+            'scope':'https://www.googleapis.com/auth/calendar',
+            'immediate': 'true'
+          }, vm.getCalList);
+        }();
+
         // removes an item from the shopping list
         vm.removeItem = function(index){
           vm.firstItemArray.splice(index, 1);
@@ -129,12 +138,7 @@ app.controller('RecipeCtrl',
               })
             })
           })
-        }
-
-        //authorizes google calendar access. window.initGapi has to be called from mainview "#/" to work. IIFE called on controller load.
-        vm.authorizeGcal = function(){
-          gapi.auth.authorize({'client_id':'924207721083-ml5b665amj85lakklupikqurgrbaqatd.apps.googleusercontent.com', 'scope':'https://www.googleapis.com/auth/calendar',  'immediate': 'true'}, vm.getCalList);
-          }();
+        };
 
         //sends user back to likes, doesn't destroy the selected arrays until they return to recipeCtrl
         vm.backToLikes = function(){
@@ -185,7 +189,6 @@ app.controller('RecipeCtrl',
                             firstItemArray.push(filteredItem);
                           })
                           console.log(finalRecipeArray);
-                          console.log(reallyFinalRecipeArray);
                           loading.pop();
                         }
                         )
@@ -195,13 +198,13 @@ app.controller('RecipeCtrl',
                   }
                   }
                 });
-            };
-          }; // end getRecipes
+          };
+        }; // end getRecipes
 
         // main function logic for assigning recipes to google cal.
-        vm.megaFire = function(){
+        var megaFire = function(){
+          console.log(finalRecipeArray)
           vm.finalItemArray = firstItemArray;
-          console.log(vm.finalItemArray);
             // event asset.
             var dinner = {
               "kind": "calendar#event",
@@ -245,25 +248,35 @@ app.controller('RecipeCtrl',
                     'resource': dinner
                   }).execute(function(respEC){
                   console.log(respEC)
-                  console.log("Event created successfully");
-                })
+                  })
               } else {
                   console.log("Robots have already planned!");
               }
             })
             //calls the delayMegaFire callback.
-            delayMegaFire();
+            vm.delayMegaFire();
           }; // end megaFire
 
           //deletes date arrays as recipes are deleted out of finalRecipeArray and pushed to google calendar. callsback to megaFire.
-      vm.delayMegaFire = function(){
-            startTime.shift();
+      var delayMegaFire = function(){
+            setTimeout(function() {
+              startTime.shift();
             endTime.shift();
             finalRecipeArray.shift();
-            megaFire();
-          } // end delayMegaFire
+            vm.megaFire();
+          }, 500);
 
+          }; // end delayMegaFire
 
+         //calls megaFire to angular
+      vm.megaFire = function(){
+          megaFire();
+      }
+
+      // calls delayMegaFire to angular
+      vm.delayMegaFire = function(){
+          delayMegaFire();
+      }
     }
   ]
 )

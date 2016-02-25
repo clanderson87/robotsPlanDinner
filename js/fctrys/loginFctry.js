@@ -1,4 +1,4 @@
-app.factory('authFactory',
+app.factory('loginFctry',
   ['$firebaseAuth',
   '$firebaseObject',
 
